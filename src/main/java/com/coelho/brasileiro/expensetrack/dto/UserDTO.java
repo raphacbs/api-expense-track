@@ -12,7 +12,6 @@ import java.util.UUID;
 public class UserDTO implements Dto {
     private UUID id;
     private String email;
-    private String password;
     private String createdAt;
     private String firstName;
     private String lastName;

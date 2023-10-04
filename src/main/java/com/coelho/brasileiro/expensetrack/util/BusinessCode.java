@@ -4,5 +4,6 @@ public interface BusinessCode {
     interface UserCodes{
         Integer USER = 100000;
         Integer USER_OR_PASSWORD_INVALID = USER + 10;
+        Integer USER_ALREADY_EXISTS = USER + 20;
     }
 }

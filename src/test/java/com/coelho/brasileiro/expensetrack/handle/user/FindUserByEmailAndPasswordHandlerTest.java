@@ -3,7 +3,7 @@ package com.coelho.brasileiro.expensetrack.handle.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.exception.BusinessException;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByIdHandler;
+import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByEmailAndPasswordHandler;
 import com.coelho.brasileiro.expensetrack.model.User;
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.repository.UserRepository;
@@ -20,13 +20,13 @@ import static com.coelho.brasileiro.expensetrack.utils.UserUtil.createUserBuilde
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class FindUserByIdHandlerTest {
+public class FindUserByEmailAndPasswordHandlerTest {
 
     @Mock
     UserRepository userRepository;
 
     @InjectMocks
-    FindUserByIdHandler findUserByIdHandler;
+    FindUserByEmailAndPasswordHandler findUserByEmailAndPasswordHandler;
 
     @BeforeEach
     void setup(){
@@ -42,7 +42,7 @@ public class FindUserByIdHandlerTest {
                 );
         Context context = DefaultContext.builder().build();
         context.setEntity("USER", createUserBuilder().id(user.getId()).build());
-        findUserByIdHandler.handle(context);
+        findUserByEmailAndPasswordHandler.handle(context);
 
         Assertions.assertNotNull(context.getEntity("USER", User.class));
         Assertions.assertEquals(context.getEntity("USER", User.class).getId(), user.getId());
@@ -59,7 +59,7 @@ public class FindUserByIdHandlerTest {
 
         BusinessException thrown = Assertions.assertThrows(
                 BusinessException.class,
-                () -> findUserByIdHandler.handle(context)
+                () -> findUserByEmailAndPasswordHandler.handle(context)
         );
 
 

@@ -1,10 +1,12 @@
 package com.coelho.brasileiro.expensetrack.context;
 
 import com.coelho.brasileiro.expensetrack.dto.UserDTO;
+import com.coelho.brasileiro.expensetrack.dto.request.UserRequest;
 import com.coelho.brasileiro.expensetrack.model.User;
 import com.coelho.brasileiro.expensetrack.util.Constants;
 import com.coelho.brasileiro.expensetrack.dto.request.LoginRequest;
 import lombok.Builder;
+
 
 @Builder
 public class DefaultContext extends BaseContext{
@@ -30,5 +32,12 @@ public class DefaultContext extends BaseContext{
 
     public void setLoginRequest(LoginRequest loginRequest){
         this.setInput(Constants.User.USER_INPUT, loginRequest);
+    }
+
+    public void setUserRequest(UserRequest userRequest){
+        this.setInput(Constants.User.USER_INPUT, userRequest);
+    }
+    public UserRequest getUserRequest(){
+        return this.getInput(Constants.User.USER_INPUT, UserRequest.class);
     }
 }

@@ -2,7 +2,7 @@ package com.coelho.brasileiro.expensetrack.flow.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertInputToEntityHandler;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByIdHandler;
+import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByEmailAndPasswordHandler;
 import com.coelho.brasileiro.expensetrack.dto.request.LoginRequest;
 import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.FlowFactory;
@@ -31,7 +31,7 @@ public class DoLoginFlowBuilder extends AFlowBuilder<DoLoginFlowBuilder> {
                 .context(context)
                 .addAction(validateInput)
                 .addAction(ConvertInputToEntityHandler.class)
-                .addAction(FindUserByIdHandler.class)
+                .addAction(FindUserByEmailAndPasswordHandler.class)
                 .addAction(ConvertEntityToDtoHandler.class)
                 .addAction(GenerateTokenHandler.class)
                 .build();

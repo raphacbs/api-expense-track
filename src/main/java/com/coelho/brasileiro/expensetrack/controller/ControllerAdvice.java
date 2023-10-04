@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@org.springframework.web.bind.annotation.ControllerAdvice(basePackages = {"com.coelho.expensetrack.expensetrack.controller",
-        "com.coelho.expensetrack.expensetrack.filter"})
+@org.springframework.web.bind.annotation.ControllerAdvice(basePackages = {"com.coelho.brasileiro.expensetrack.controller",
+        "com.coelho.brasileiro.expensetrack.filter"})
 public class ControllerAdvice {
     private final Logger logger = LoggerFactory.getLogger(ControllerAdvice.class);
 

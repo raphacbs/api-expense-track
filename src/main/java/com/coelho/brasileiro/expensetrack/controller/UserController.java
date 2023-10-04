@@ -1,6 +1,7 @@
 package com.coelho.brasileiro.expensetrack.controller;
 
 
+import com.coelho.brasileiro.expensetrack.dto.request.UserRequest;
 import com.coelho.brasileiro.expensetrack.service.UserService;
 import com.coelho.brasileiro.expensetrack.dto.TokenDto;
 import com.coelho.brasileiro.expensetrack.dto.request.LoginRequest;
@@ -21,5 +22,10 @@ public class UserController {
     public ResponseEntity<?> auth(@RequestBody LoginRequest loginRequest){
        TokenDto tokenDto = this.userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK).body(tokenDto);
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signup(@RequestBody UserRequest userRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.signUp(userRequest));
     }
 }

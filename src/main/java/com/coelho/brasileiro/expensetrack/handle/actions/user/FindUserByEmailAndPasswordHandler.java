@@ -11,11 +11,11 @@ import static com.coelho.brasileiro.expensetrack.util.BusinessCode.UserCodes.USE
 import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER;
 
 @Component
-public class FindUserByIdHandler extends AbstractHandler {
+public class FindUserByEmailAndPasswordHandler extends AbstractHandler {
 
     private final UserRepository userRepository;
 
-    public FindUserByIdHandler(UserRepository userRepository) {
+    public FindUserByEmailAndPasswordHandler(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

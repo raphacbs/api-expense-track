@@ -6,6 +6,7 @@ public class Constants {
         String USER = "USER";
         String USER_INPUT = USER+"_INPUT";
         String USER_DTO = USER+"_DTO";
+        String USER_REQUEST = USER+"_REQUEST";
 
     }
 

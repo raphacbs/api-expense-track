@@ -4,7 +4,7 @@ package com.coelho.brasileiro.expensetrack.context;
 
 
 
-import com.coelho.brasileiro.expensetrack.dto.request.InputRequest;
+import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.dto.Dto;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
 
@@ -15,16 +15,18 @@ import java.util.Map;
 
 
 public abstract class BaseContext implements Context {
-    private final Map<String, InputRequest> inputs = new HashMap<>();
+    private final Map<String, Input> inputs = new HashMap<>();
     private final Map<String, Dto> dtos = new HashMap<>();
     private final Map<String, IEntity> entities = new HashMap<>();
     private final Map<String, List<? extends Dto>> dtosList = new HashMap<>();
     private final Map<String, List<? extends IEntity>> entitiesList = new HashMap<>();
 
+    private String entityCurrent;
+
 
     @Override
-    public <T extends InputRequest> T getInput(String key, Class<T> clazz) {
-        InputRequest input = inputs.get(key);
+    public <T extends Input> T getInput(String key, Class<T> clazz) {
+        Input input = inputs.get(key);
         if (!clazz.isInstance(input)) {
 //            throw new IllegalArgumentException("Invalid input type for key: " + key);
             return null;
@@ -33,7 +35,7 @@ public abstract class BaseContext implements Context {
     }
 
     @Override
-    public void setInput(String key, InputRequest input) {
+    public void setInput(String key, Input input) {
         inputs.put(key, input);
     }
 
@@ -109,5 +111,15 @@ public abstract class BaseContext implements Context {
     @Override
     public void setEntities(String key, List<? extends IEntity> entities) {
         entitiesList.put(key, entities);
+    }
+
+    @Override
+    public void setEntityNameCurrent(String nameEntity) {
+        this.entityCurrent = nameEntity;
+    }
+
+    @Override
+    public String getEntityNameCurrent() {
+        return this.entityCurrent;
     }
 }

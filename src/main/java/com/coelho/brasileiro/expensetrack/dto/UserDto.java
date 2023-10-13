@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO implements Dto {
+public class UserDto implements Dto {
     private UUID id;
     private String email;
     private String createdAt;

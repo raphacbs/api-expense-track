@@ -1,7 +1,7 @@
 package com.coelho.brasileiro.expensetrack.handle.actions.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.dto.UserDto;
+import com.coelho.brasileiro.expensetrack.input.UserUpdate;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
 import com.coelho.brasileiro.expensetrack.model.User;
@@ -9,13 +9,14 @@ import com.coelho.brasileiro.expensetrack.util.Constants;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConvertEntityToDtoHandler extends AbstractHandler {
+public class UpdateUserEntityHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
         User user = context.getEntity(Constants.User.USER, User.class);
+        UserUpdate userUpdateRequest = context.getInput(Constants.User.USER_INPUT, UserUpdate.class);
 
-        UserDto userDTO = Converter.INSTANCE.toDto(user);
+        User userUpdated = Converter.INSTANCE.partialUpdate(userUpdateRequest, user);
 
-        context.setDto(Constants.User.USER_DTO,userDTO);
+        context.setEntity(Constants.User.USER,userUpdated);
     }
 }

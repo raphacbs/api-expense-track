@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.Base64;
 
 public class JwtFilter extends GenericFilterBean {
+
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;

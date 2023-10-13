@@ -12,13 +12,8 @@ public class FilterConfig {
         FilterRegistrationBean filter= new FilterRegistrationBean();
         filter.setFilter(new JwtFilter());
 
-        // provide endpoints which needs to be restricted.
-        // All Endpoints would be restricted if unspecified
-
-        filter.addUrlPatterns("/api/v1/items/*");
-        filter.addUrlPatterns("/api/v1/shopping-lists/*");
-        filter.addUrlPatterns("/api/v1/units/*");
-
+        // Especifique a URL que deseja filtrar
+        filter.addUrlPatterns("/api/v1/user/update/*");
         return filter;
     }
 }

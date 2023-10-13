@@ -1,9 +1,9 @@
 package com.coelho.brasileiro.expensetrack.flow.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
+import com.coelho.brasileiro.expensetrack.input.LoginInput;
 import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertInputToEntityHandler;
 import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByEmailAndPasswordHandler;
-import com.coelho.brasileiro.expensetrack.dto.request.LoginRequest;
 import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.FlowFactory;
 import com.coelho.brasileiro.expensetrack.handle.actions.ValidateInput;
@@ -16,16 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DoLoginFlowBuilder extends AFlowBuilder<DoLoginFlowBuilder> {
     private final FlowFactory flowFactory;
-    private final InputValidator<LoginRequest> inputValidator;
+    private final InputValidator<LoginInput> inputValidator;
 
     @Autowired
-    public DoLoginFlowBuilder(FlowFactory flowFactory, InputValidator<LoginRequest> inputValidator) {
+    public DoLoginFlowBuilder(FlowFactory flowFactory, InputValidator<LoginInput> inputValidator) {
         this.flowFactory = flowFactory;
         this.inputValidator = inputValidator;
     }
     @Override
     public DoLoginFlowBuilder create(Context context) {
-        ValidateInput<LoginRequest> validateInput = new ValidateInput<>(inputValidator);
+        ValidateInput<LoginInput> validateInput = new ValidateInput<>(inputValidator);
         flow = flowFactory
                 .start()
                 .context(context)

@@ -1,6 +1,6 @@
 package com.coelho.brasileiro.expensetrack.context;
 
-import com.coelho.brasileiro.expensetrack.dto.request.InputRequest;
+import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.dto.Dto;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
 
@@ -8,9 +8,9 @@ import com.coelho.brasileiro.expensetrack.model.IEntity;
 import java.util.List;
 
 public interface Context {
-    <T extends InputRequest> T getInput(String key, Class<T> clazz);
+    <T extends Input> T getInput(String key, Class<T> clazz);
 
-    void setInput(String key, InputRequest input);
+    void setInput(String key, Input input);
 
     <T extends Dto> T getDto(String key, Class<T> clazz);
 
@@ -27,4 +27,7 @@ public interface Context {
     <T extends IEntity> List<T> getEntities(String key, Class<T> clazz);
 
     void setEntities(String key, List<? extends IEntity> entities);
+
+    void setEntityNameCurrent(String nameEntity);
+    String getEntityNameCurrent();
 }

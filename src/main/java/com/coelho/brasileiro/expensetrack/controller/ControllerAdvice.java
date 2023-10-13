@@ -28,7 +28,7 @@ public class ControllerAdvice {
     public ResponseEntity<MessageExceptionHandler> business(BusinessException businessException) {
         MessageExceptionHandler error = new MessageExceptionHandler(businessException.getErrorCode(),
                 "There is something wrong with your request.");
-        return new ResponseEntity<>(error, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody

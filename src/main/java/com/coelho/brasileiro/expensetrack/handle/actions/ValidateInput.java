@@ -1,7 +1,7 @@
 package com.coelho.brasileiro.expensetrack.handle.actions;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.dto.request.InputRequest;
+import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.util.Constants;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
@@ -20,6 +20,6 @@ public class ValidateInput<T> extends AbstractHandler {
 
     @Override
     protected void doHandle(Context context) {
-        inputValidator.validate(((T) context.getInput(Constants.User.USER_INPUT, InputRequest.class)));
+        inputValidator.validate(((T) context.getInput(context.getEntityNameCurrent() + "_INPUT", Input.class)));
     }
 }

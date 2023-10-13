@@ -1,23 +1,23 @@
 package com.coelho.brasileiro.expensetrack.handle.actions.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.input.LoginInput;
+import com.coelho.brasileiro.expensetrack.input.UserInput;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
 import com.coelho.brasileiro.expensetrack.model.User;
 import org.springframework.stereotype.Component;
 
-import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER;
+import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER_INPUT;
 
 @Component
-public class ConvertInputToEntityHandler extends AbstractHandler {
+public class ConvertUserInputToUserHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
 
-        LoginInput loginInputRequest = context.getInput(USER_INPUT, LoginInput.class);
+        UserInput userInput = context.getInput(USER_INPUT, UserInput.class);
 
-        User user = Converter.INSTANCE.toEntity(loginInputRequest);
+        User user = Converter.INSTANCE.toEntity(userInput);
 
         context.setEntity(USER,user);
     }

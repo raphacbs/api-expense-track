@@ -11,24 +11,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RegisterUserFlowBuilder extends AFlowBuilder<RegisterUserFlowBuilder> {
+public class UpdateUserFlowBuilder extends AFlowBuilder<UpdateUserFlowBuilder> {
     private final FlowFactory flowFactory;
     private final InputValidator<UserInput> inputValidator;
 
     @Autowired
-    public RegisterUserFlowBuilder(FlowFactory flowFactory, InputValidator<UserInput> inputValidator) {
+    public UpdateUserFlowBuilder(FlowFactory flowFactory, InputValidator<UserInput> inputValidator) {
         this.flowFactory = flowFactory;
         this.inputValidator = inputValidator;
     }
     @Override
-    public RegisterUserFlowBuilder create(Context context) {
+    public UpdateUserFlowBuilder create(Context context) {
         ValidateInput<UserInput> validateInput = new ValidateInput<>(inputValidator);
         flow = flowFactory
                 .start()
                 .context(context)
                 .addAction(validateInput)
-                .addAction(ConvertUserInputToUserHandler.class)
-                .addAction(VerifyIfUserExistHandler.class)
+                .addAction(ConvertUserUpdateRequestToUserHandler.class)
+                .addAction(FindUserByEmailHandler.class)
+                .addAction(UpdateUserEntityHandler.class)
                 .addAction(SaveUserHandler.class)
                 .addAction(ConvertEntityToDtoHandler.class)
                 .build();

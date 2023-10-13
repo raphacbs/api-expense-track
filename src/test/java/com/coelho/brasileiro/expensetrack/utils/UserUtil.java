@@ -1,15 +1,15 @@
 package com.coelho.brasileiro.expensetrack.utils;
 
+import com.coelho.brasileiro.expensetrack.input.LoginInput;
 import com.coelho.brasileiro.expensetrack.model.User;
-import com.coelho.brasileiro.expensetrack.dto.request.LoginRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserUtil {
 
-    public static LoginRequest createLoginRequest(){
-        return new LoginRequest("test@email.com",
+    public static LoginInput createLoginRequest(){
+        return new LoginInput("test@email.com",
                 "123456");
     }
 

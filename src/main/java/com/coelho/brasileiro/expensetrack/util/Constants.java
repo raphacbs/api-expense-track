@@ -15,4 +15,11 @@ public class Constants {
         String TOKEN_DTO = TOKEN+"_DTO";
 
     }
+
+    public interface Category{
+        String CATEGORY = "CATEGORY";
+        String CATEGORY_INPUT = CATEGORY+"_INPUT";
+        String CATEGORY_DTO = CATEGORY+"_DTO";
+        String CATEGORY_REQUEST = CATEGORY+"_REQUEST";
+    }
 }

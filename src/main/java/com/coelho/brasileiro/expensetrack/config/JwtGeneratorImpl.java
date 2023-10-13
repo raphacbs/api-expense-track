@@ -1,7 +1,7 @@
 package com.coelho.brasileiro.expensetrack.config;
 
 import com.coelho.brasileiro.expensetrack.dto.TokenDto;
-import com.coelho.brasileiro.expensetrack.dto.UserDTO;
+import com.coelho.brasileiro.expensetrack.dto.UserDto;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,7 +18,7 @@ public class JwtGeneratorImpl implements JwtGenerator {
     private String secret;
 
     @Override
-    public TokenDto generateToken(UserDTO user) {
+    public TokenDto generateToken(UserDto user) {
         final LocalDateTime localDateTime = LocalDateTime.now().plusHours(3);
         // Date expireDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         String jwtToken = "";

@@ -1,17 +1,17 @@
 package com.coelho.brasileiro.expensetrack.context;
 
 
-
-
-
-import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.dto.Dto;
+import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
+import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
+import org.springframework.data.domain.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public abstract class BaseContext implements Context {
@@ -22,6 +22,12 @@ public abstract class BaseContext implements Context {
     private final Map<String, List<? extends IEntity>> entitiesList = new HashMap<>();
 
     private String entityCurrent;
+
+    private Map<String, String> params; //<key, value>
+
+    private Page<?> page;
+
+    private ResponsePage<?> responsePage;
 
 
     @Override
@@ -121,5 +127,77 @@ public abstract class BaseContext implements Context {
     @Override
     public String getEntityNameCurrent() {
         return this.entityCurrent;
+    }
+
+    @Override
+    public Map<String, String> getParams() {
+        return this.params;
+    }
+
+    @Override
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+
+    public Page<?> getPage() {
+        return page;
+    }
+
+    @Override
+    public void setPage(Page<? extends IEntity> page) {
+        if (this.page == null || page.isEmpty()) {
+            this.page = page;
+        } else {
+            // 1. Obtenha as duas listas de objetos a serem mescladas.
+            List<? extends IEntity> existingContent = (List<? extends IEntity>) this.page.getContent();
+            List<? extends IEntity> newContent = page.getContent();
+
+            // 2. Mescle as duas listas, evitando objetos com o mesmo ID.
+            Set<UUID> existingIds = existingContent.stream()
+                    .map(IEntity::getId)
+                    .collect(Collectors.toSet());
+
+            List<IEntity> mergedContent = Stream.concat(
+                    existingContent.stream(),
+                    newContent.stream()
+                            .filter(entity -> !existingIds.contains(entity.getId()))
+            ).collect(Collectors.toList());
+
+            // 3. Crie um objeto Sort com os campos de ordenação.
+            Sort sort = Sort.by(Sort.Order.asc("yourSortField"));
+
+            // 4. Crie um objeto Pageable com informações de paginação.
+            int pageSize = page.getSize(); // Tamanho da página
+            int pageNumber = page.getNumber(); // Número da página
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+            // 5. Ordene a lista mergedContent usando o Sort.
+            mergedContent.sort((e1, e2) -> {
+                // Ordene os objetos com base em 'yourSortField'
+                Comparable field1 = e1.getId();
+                Comparable field2 = e2.getId();
+                return field1.compareTo(field2);
+            });
+
+            // 6. Pagine a lista ordenada usando o objeto Pageable.
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), mergedContent.size());
+
+            List<IEntity> pagedContent = mergedContent.subList(start, end);
+
+            this.page = new PageImpl<>(pagedContent, pageable, mergedContent.size());
+        }
+    }
+
+
+
+    @Override
+    public void addResponsePage(ResponsePage<?> responsePage) {
+        this.responsePage = responsePage;
+    }
+
+    @Override
+    public ResponsePage<?> getResponsePage() {
+        return responsePage;
     }
 }

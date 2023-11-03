@@ -1,11 +1,14 @@
 package com.coelho.brasileiro.expensetrack.context;
 
+import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
 import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.dto.Dto;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
+import org.springframework.data.domain.Page;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface Context {
     <T extends Input> T getInput(String key, Class<T> clazz);
@@ -30,4 +33,13 @@ public interface Context {
 
     void setEntityNameCurrent(String nameEntity);
     String getEntityNameCurrent();
+
+    Map<String, String> getParams();
+
+    void setParams(Map<String, String> params);
+    <T extends IEntity> Page<T> getPage();
+    void setPage(Page<? extends IEntity> page);
+
+    void addResponsePage(ResponsePage<?> responsePage);
+    ResponsePage<?> getResponsePage();
 }

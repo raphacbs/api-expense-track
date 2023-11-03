@@ -14,6 +14,8 @@ public class FilterConfig {
 
         // Especifique a URL que deseja filtrar
         filter.addUrlPatterns("/api/v1/user/update/*");
+        filter.addUrlPatterns("/api/v1/budgets/*");
+        filter.addUrlPatterns("/api/v1/categories/*");
         return filter;
     }
 }

@@ -3,7 +3,9 @@ package com.coelho.brasileiro.expensetrack.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -23,10 +25,10 @@ public class Budget implements IEntity{
     private String name;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
     private boolean active;
@@ -39,9 +41,8 @@ public class Budget implements IEntity{
     @JoinColumn(name = "category_id")
     private Category category;
 
-
     @Column(nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = true)
     private String notes;
@@ -49,5 +50,7 @@ public class Budget implements IEntity{
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column
+    private UUID parentId;
 
 }

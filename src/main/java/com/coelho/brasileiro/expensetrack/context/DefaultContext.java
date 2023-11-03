@@ -1,14 +1,14 @@
 package com.coelho.brasileiro.expensetrack.context;
 
+import com.coelho.brasileiro.expensetrack.dto.BudgetDto;
 import com.coelho.brasileiro.expensetrack.dto.CategoryDto;
 import com.coelho.brasileiro.expensetrack.dto.UserDto;
-import com.coelho.brasileiro.expensetrack.input.CategoryInput;
-import com.coelho.brasileiro.expensetrack.input.LoginInput;
-import com.coelho.brasileiro.expensetrack.input.UserInput;
-import com.coelho.brasileiro.expensetrack.input.UserUpdate;
+import com.coelho.brasileiro.expensetrack.input.*;
 import com.coelho.brasileiro.expensetrack.util.Constants;
 import lombok.Builder;
 
+import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_DTO;
+import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY_DTO;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY_INPUT;
 
@@ -66,4 +66,11 @@ public class DefaultContext extends BaseContext{
     }
 
 
+    public void setBudgetInput(BudgetInput budgetInput) {
+        this.setInput(BUDGET_INPUT, budgetInput);
+    }
+
+    public BudgetDto getBudgetDto() {
+        return this.getDto(BUDGET_DTO, BudgetDto.class);
+    }
 }

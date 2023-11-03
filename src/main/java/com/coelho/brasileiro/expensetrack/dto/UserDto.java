@@ -16,4 +16,5 @@ public class UserDto implements Dto {
     private String firstName;
     private String lastName;
     private String googleAccountId;
+    private String initials;
 }

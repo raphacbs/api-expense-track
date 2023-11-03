@@ -12,6 +12,7 @@ import com.coelho.brasileiro.expensetrack.flow.user.DoLoginFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.user.RegisterUserFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.user.UpdateUserFlowBuilder;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
+import com.coelho.brasileiro.expensetrack.model.User;
 import com.coelho.brasileiro.expensetrack.repository.UserRepository;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.coelho.brasileiro.expensetrack.util.Constants.Token.TOKEN_DTO;
@@ -38,14 +41,17 @@ public class UserService {
 
     private final UpdateUserFlowBuilder updateUserFlowBuilder;
 
+    private final HttpServletRequest request;
+
     public UserService(UserRepository userRepository,
                        DoLoginFlowBuilder doLoginFlowBuilder,
                        RegisterUserFlowBuilder registerUserFlowBuilder,
-                       UpdateUserFlowBuilder updateUserFlowBuilder) {
+                       UpdateUserFlowBuilder updateUserFlowBuilder, HttpServletRequest request) {
         this.userRepository = userRepository;
         this.doLoginFlowBuilder = doLoginFlowBuilder;
         this.registerUserFlowBuilder = registerUserFlowBuilder;
         this.updateUserFlowBuilder = updateUserFlowBuilder;
+        this.request = request;
     }
 
     public TokenDto login(LoginInput loginInputRequest) {
@@ -71,5 +77,14 @@ public class UserService {
         context.setEntityNameCurrent("USER");
         updateUserFlowBuilder.create(context).build().run();
         return context.getUserDto();
+    }
+
+    public User getUserLogged() {
+        Map<String, String> map = (Map<String, String>) request.getAttribute("claims");
+        return User.builder().id(UUID.fromString(map.get("id")))
+                .email(map.get("email"))
+                .firstName(map.get("firstName"))
+                .lastName(map.get("lastName"))
+                .build();
     }
 }

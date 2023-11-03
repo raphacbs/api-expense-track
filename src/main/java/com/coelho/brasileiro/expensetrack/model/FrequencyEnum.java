@@ -1,7 +1,7 @@
 package com.coelho.brasileiro.expensetrack.model;
 
 public enum FrequencyEnum {
-    YEARLY("Y"),
+    ANNUAL("A"),
     MONTHLY("M"),
     BIWEEKLY("BW"),
     WEEKLY("W"),

@@ -11,5 +11,5 @@ public class TokenDto implements Dto{
     private String token;
     private String message;
     private String expiredAt;
-
+    private UserDto user;
 }

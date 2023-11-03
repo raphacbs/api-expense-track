@@ -33,6 +33,7 @@ public class JwtGeneratorImpl implements JwtGenerator {
                 .compact();
         return TokenDto.builder()
                 .token(jwtToken)
+                .user(user)
                 .message("Login successful")
                 .expiredAt(localDateTime.format(DateTimeFormatter
                         .ofPattern("yyyy-MM-dd HH:mm:ss")))

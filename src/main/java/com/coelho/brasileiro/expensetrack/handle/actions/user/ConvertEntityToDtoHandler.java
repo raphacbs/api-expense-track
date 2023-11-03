@@ -14,7 +14,7 @@ public class ConvertEntityToDtoHandler extends AbstractHandler {
     protected void doHandle(Context context) {
         User user = context.getEntity(Constants.User.USER, User.class);
 
-        UserDto userDTO = Converter.INSTANCE.toDto(user);
+        UserDto userDTO = Converter.INSTANCE.toUserDto(user);
 
         context.setDto(Constants.User.USER_DTO,userDTO);
     }

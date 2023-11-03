@@ -16,7 +16,7 @@ public class ConvertCategoryToCategoryDtoHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
         Category  category = context.getEntity(CATEGORY, Category.class);
-        CategoryDto  categoryDto = Converter.INSTANCE.toDto(category);
+        CategoryDto  categoryDto = Converter.INSTANCE.toCategoryDto(category);
         context.setDto(CATEGORY_DTO, categoryDto);
     }
 }

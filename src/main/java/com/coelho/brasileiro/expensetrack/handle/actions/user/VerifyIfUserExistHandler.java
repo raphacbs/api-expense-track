@@ -8,7 +8,6 @@ import com.coelho.brasileiro.expensetrack.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import static com.coelho.brasileiro.expensetrack.util.BusinessCode.UserCodes.USER_ALREADY_EXISTS;
-import static com.coelho.brasileiro.expensetrack.util.BusinessCode.UserCodes.USER_OR_PASSWORD_INVALID;
 import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER;
 
 @Component

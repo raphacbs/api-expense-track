@@ -3,7 +3,6 @@ package com.coelho.brasileiro.expensetrack.handle.actions.category;
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.input.CategoryInput;
-import com.coelho.brasileiro.expensetrack.mapper.CategoryMapper;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
 import com.coelho.brasileiro.expensetrack.model.Category;
 import org.springframework.stereotype.Component;

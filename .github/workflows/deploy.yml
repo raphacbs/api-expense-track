@@ -1,0 +1,24 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: SSH into Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 195.35.42.54
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY_SERVER_DIY_COMPANY }}
+          script: |
+            # Execute o script de implantação no servidor
+            /apps/deploys/expense-track/deploy.sh

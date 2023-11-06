@@ -39,7 +39,7 @@ jobs:
           SOURCE: "target/api-expense-track.jar"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ env.REMOTE_TARGET }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
 
       - name: Deploy DOCKERFILE to VPS
         uses: easingthemes/ssh-deploy@main
@@ -49,7 +49,7 @@ jobs:
           SOURCE: "Dockerfile"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: ${{ env.REMOTE_TARGET }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
 
       - name: Run container
         uses: appleboy/ssh-action@v1.0.0
@@ -65,7 +65,7 @@ jobs:
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"
             DATABASE_PASSWORD="${{ secrets.REMOTE_DATABASE_PASSWORD }}"
-            JAR_FILE_PATH="${{ env.REMOTE_TARGET }}/api-expense-track.jar"
+            JAR_FILE_PATH="${{ secrets.REMOTE_TARGET }}/api-expense-track.jar"
             EXPENSE_TRACK_JWT_SECRET=${{ secrets.EXPENSE_TRACK_JWT_SECRET }}
             TZ="America/Sao_Paulo"
             if [ "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
@@ -75,5 +75,5 @@ jobs:
             else
               echo "Nenhum contêiner com o nome $CONTAINER_NAME encontrado."
             fi
-            docker build -t api-expense-track-img ${{ env.REMOTE_TARGET }}
+            docker build -t api-expense-track-img ${{ secrets.REMOTE_TARGET }}
             docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8082:8082 -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=8082 api-expense-track-img

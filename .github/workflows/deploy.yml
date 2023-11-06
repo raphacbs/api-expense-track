@@ -60,7 +60,7 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           script: |
             CONTAINER_NAME="api-expense-track"
-            IMAGE_NAME="openjdk:19"
+            IMAGE_NAME="api-expense-track-img"
             NETWORK_NAME="bridge"
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"
@@ -72,8 +72,10 @@ jobs:
               echo "Parando e removendo o contêiner existente..."
               docker stop $CONTAINER_NAME
               docker rm $CONTAINER_NAME
+              sh apis/scripts/remove_image.sh -n $IMAGE_NAME
             else
               echo "Nenhum contêiner com o nome $CONTAINER_NAME encontrado."
             fi
-            docker build -t api-expense-track-img ${{ secrets.REMOTE_TARGET }}
-            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8082:8082 -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=8082 api-expense-track-img
+            
+            docker build -t $IMAGE_NAME ${{ secrets.REMOTE_TARGET }}
+            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8082:8082 -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=8082 $IMAGE_NAME

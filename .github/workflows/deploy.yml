@@ -76,4 +76,4 @@ jobs:
               echo "Nenhum contêiner com o nome $CONTAINER_NAME encontrado."
             fi
             docker build -t api-expense-track-img ${{ secrets.REMOTE_TARGET }}
-            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8082:8082 -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ api-expense-track-img
+            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p 8082:8082 -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=8082 api-expense-track-img

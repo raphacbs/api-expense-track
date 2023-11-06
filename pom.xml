@@ -14,7 +14,7 @@
 	<name>ExpenseTrack</name>
 	<description>Aplicação de gerenciamento de despesas pessoais</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -110,6 +110,7 @@
     </dependencies>
 
 	<build>
+		<finalName>api-expense-track</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

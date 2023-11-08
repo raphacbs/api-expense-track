@@ -65,8 +65,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_SERVER_DIY_COMPANY }}
           port: ${{ secrets.REMOTE_PORT }}
           script: |
-            CONTAINER_NAME="api-expense-track-dev"
-            IMAGE_NAME="api-expense-track-dev-img"
+            CONTAINER_NAME="${{ vars.CONTAINER_NAME }}"
+            IMAGE_NAME="${{ vars.IMAGE_NAME }}"
             PATH_TARGET="${{ vars.REMOTE_TARGET }}"
             PORT=${{ vars.SERVER_PORT }}
             NETWORK_NAME="bridge"

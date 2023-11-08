@@ -88,5 +88,5 @@ jobs:
               echo "Nenhum contêiner com o nome $CONTAINER_NAME encontrado."
             fi
             
-            docker build -t $IMAGE_NAME $PATH_DOCKERFILE
+            docker build -t $IMAGE_NAME -f $PATH_DOCKERFILE $PATH_TARGET
             docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $SERVER_PORT:$SERVER_PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$SERVER_PORT $IMAGE_NAME

@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     env:
-      REMOTE_TARGET: ${{ env.REMOTE_TARGET }}
-      SERVER_PORT: ${{ env.SERVER_PORT }}
+      REMOTE_TARGET: ${{ vars.REMOTE_TARGET }}
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

@@ -72,6 +72,7 @@ jobs:
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"
             DATABASE_PASSWORD="${{ secrets.REMOTE_DATABASE_PASSWORD }}"
             JAR_FILE_PATH="$REMOTE_TARGET/api-expense-track.jar"
+            PATH_DOCKERFILE=$REMOTE_TARGET/dev.Dockerfile
             EXPENSE_TRACK_JWT_SECRET=${{ secrets.EXPENSE_TRACK_JWT_SECRET }}
             TZ="America/Sao_Paulo"
             if [ "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
@@ -83,5 +84,5 @@ jobs:
               echo "Nenhum contêiner com o nome $CONTAINER_NAME encontrado."
             fi
             
-            docker build -t $IMAGE_NAME $REMOTE_TARGET/dev.Dockerfile
+            docker build -t $IMAGE_NAME $PATH_DOCKERFILE
             docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $SERVER_PORT:$SERVER_PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$SERVER_PORT $IMAGE_NAME

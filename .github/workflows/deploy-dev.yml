@@ -67,7 +67,7 @@ jobs:
           script: |
             CONTAINER_NAME="api-expense-track-dev"
             IMAGE_NAME="api-expense-track-dev-img"
-            PATH_TARGET= "${{ vars.REMOTE_TARGET }}"
+            PATH_TARGET="${{ vars.REMOTE_TARGET }}"
             echo "PATH_TARGET=$PATH_TARGET"
             NETWORK_NAME="bridge"
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"

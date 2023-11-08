@@ -68,14 +68,17 @@ jobs:
             CONTAINER_NAME="api-expense-track-dev"
             IMAGE_NAME="api-expense-track-dev-img"
             REMOTE_TARGET= "${{ vars.REMOTE_TARGET }}"
+            echo $REMOTE_TARGET
             NETWORK_NAME="bridge"
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"
             DATABASE_PASSWORD="${{ secrets.REMOTE_DATABASE_PASSWORD }}"
-            JAR_FILE_PATH="${{ $REMOTE_TARGET/api-expense-track.jar }}"
-            PATH_DOCKERFILE="${{ $REMOTE_TARGET/dev.Dockerfile }}"
+            JAR_FILE_PATH="$REMOTE_TARGET/api-expense-track.jar"
+            PATH_DOCKERFILE="$REMOTE_TARGET/dev.Dockerfile"
             EXPENSE_TRACK_JWT_SECRET=${{ secrets.EXPENSE_TRACK_JWT_SECRET }}
             TZ="America/Sao_Paulo"
+            echo $JAR_FILE_PATH
+            echo $PATH_DOCKERFILE
             if [ "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
               echo "Parando e removendo o contêiner existente..."
               docker stop $CONTAINER_NAME

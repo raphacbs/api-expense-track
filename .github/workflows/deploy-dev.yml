@@ -68,15 +68,13 @@ jobs:
             CONTAINER_NAME="api-expense-track-dev"
             IMAGE_NAME="api-expense-track-dev-img"
             PATH_TARGET="${{ vars.REMOTE_TARGET }}"
-            echo "PATH_TARGET=$PATH_TARGET"
+            PORT=${{ vars.SERVER_PORT }}
             NETWORK_NAME="bridge"
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"
             DATABASE_PASSWORD="${{ secrets.REMOTE_DATABASE_PASSWORD }}"
             JAR_FILE_PATH="$PATH_TARGET/api-expense-track.jar"
-            echo "JAR_FILE_PATH=$JAR_FILE_PATH"
             PATH_DOCKERFILE="$PATH_TARGET/dev.Dockerfile"
-            echo "PATH_DOCKERFILE=$PATH_DOCKERFILE"
             EXPENSE_TRACK_JWT_SECRET=${{ secrets.EXPENSE_TRACK_JWT_SECRET }}
             TZ="America/Sao_Paulo"
             if [ "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
@@ -89,4 +87,4 @@ jobs:
             fi
             
             docker build -t $IMAGE_NAME -f $PATH_DOCKERFILE $PATH_TARGET
-            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $SERVER_PORT:$SERVER_PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$SERVER_PORT $IMAGE_NAME
+            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $PORT:$PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$PORT $IMAGE_NAME

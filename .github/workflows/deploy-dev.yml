@@ -67,6 +67,7 @@ jobs:
           script: |
             CONTAINER_NAME="api-expense-track-dev"
             IMAGE_NAME="api-expense-track-dev-img"
+            REMOTE_TARGET= ${{ vars.REMOTE_TARGET }}
             NETWORK_NAME="bridge"
             DATABASE_HOST="postgresql://${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_DATABASE_PORT }}/${{ secrets.REMOTE_DATABASE_NAME }}"
             DATABASE_USER="${{ secrets.REMOTE_DATABASE_USER }}"

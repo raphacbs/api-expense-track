@@ -3,8 +3,8 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: postgresLocal
-      POSTGRES_PASSWORD: password123
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: coelho-extrack-local
       POSTGRES_TZ: America/Sao_Paulo
       TZ: America/Sao_Paulo
@@ -16,16 +16,16 @@ services:
   app:
     image: openjdk:20
     volumes:
-      - ./target/expense-track-0.0.1-SNAPSHOT.jar:/app/expense-track-0.0.1-SNAPSHOT.jar
+      - ./target/api-expense-track.jar:/app/api-expense-track.jar
     depends_on:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/coelho-extrack-local
-      SPRING_DATASOURCE_USERNAME: postgresLocal
-      SPRING_DATASOURCE_PASSWORD: password123
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
       expense.track.jwt.secret: expensetrack
       TZ: America/Sao_Paulo
-    command: ["java", "-jar", "/app/expense-track-0.0.1-SNAPSHOT.jar"]
+    command: ["java", "-jar", "/app/api-expense-track.jar"]
     ports:
       - "8080:8080"
     container_name: api-expense-track

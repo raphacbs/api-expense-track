@@ -22,6 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filterChainExceptionHandler, LogoutFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/budgets").permitAll()
                 .and().cors().and().csrf().disable();
     }
 }

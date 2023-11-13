@@ -25,7 +25,7 @@ public class FlowFactory {
         isStarted = false;
     }
 
-    public FlowFactory start(){
+    public FlowFactory start() {
         this.flow = new Flow();
         isStarted = true;
         this.action = null;
@@ -33,9 +33,7 @@ public class FlowFactory {
     }
 
     public FlowFactory addAction(Class<? extends Handler> handlerClass) {
-        if (!isStarted) {
-            throw new IllegalStateException("You must call start() before adding actions.");
-        }
+        verifyStart();
         Handler handler = null;
         try {
             handler = applicationContext.getBean(handlerClass);
@@ -65,10 +63,7 @@ public class FlowFactory {
     }
 
     public FlowFactory addAction(Handler handlerInstance) {
-        if (!isStarted) {
-            throw new IllegalStateException("You must call start() before adding actions.");
-        }
-
+        verifyStart();
         if (action == null) {
             action = handlerInstance;
         } else {
@@ -84,17 +79,32 @@ public class FlowFactory {
         return this;
     }
 
+    public FlowFactory addFLowBuilder(Class<? extends AFlowBuilder> builderClass) {
+        verifyStart();
+        AFlowBuilder flowBuilder = applicationContext.getBean(builderClass);
+        flowBuilder.create(context);
+        Handler handler = flowBuilder.flow.getAction();
+        if (handler != null) {
+            addAction(handler);
+        }
+        return this;
+    }
+
     public FlowFactory context(Context context) {
         this.context = context;
         return this;
     }
 
     public Flow build() {
-        if (!isStarted) {
-            throw new IllegalStateException("You must call start() before build.");
-        }
+        verifyStart();
         flow.setAction(action);
         flow.setContext(context);
         return flow;
+    }
+
+    private void verifyStart() {
+        if (!isStarted) {
+            throw new IllegalStateException("You must call start() before adding actions.");
+        }
     }
 }

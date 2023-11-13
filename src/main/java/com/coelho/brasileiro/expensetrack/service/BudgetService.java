@@ -45,6 +45,7 @@ public class BudgetService {
     }
 
     @PostConstruct
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationStart() {
         // Este método será executado quando o aplicativo Spring Boot iniciar.
         // Você pode chamar a lógica de criação de registros aqui.
@@ -52,6 +53,7 @@ public class BudgetService {
     }
 
     @Scheduled(cron = "0 0 20 * * ?") // Agendado para rodar uma vez por dia às 20hrs
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createBudgetRecordsFromRecurringBudget() {
         System.out.println("Creating budget records from recurring budgets");
         DefaultContext context = DefaultContext.builder().build();

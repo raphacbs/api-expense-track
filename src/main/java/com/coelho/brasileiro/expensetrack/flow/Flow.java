@@ -7,7 +7,7 @@ public class Flow {
     private Handler action;
     private Context context;
 
-    protected Flow(){
+    protected Flow() {
 
     }
 
@@ -17,6 +17,10 @@ public class Flow {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    protected Handler getAction() {
+        return this.action;
     }
 
     public void run() {

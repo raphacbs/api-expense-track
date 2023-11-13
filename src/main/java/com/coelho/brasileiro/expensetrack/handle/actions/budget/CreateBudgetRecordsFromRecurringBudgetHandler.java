@@ -34,9 +34,17 @@ public class CreateBudgetRecordsFromRecurringBudgetHandler extends AbstractHandl
         recurringBudgets.forEach(recurringBudget -> {
             UUID recurringBudgetId = recurringBudget.getId();
             List<Budget> budgets = this.budgetRepository.findLastBudgetByParentId(recurringBudgetId);
-            Budget lastBudget = budgets.stream().findFirst().orElseThrow(()-> new BusinessException(BUDGET_NOT_FOUND));
-            LocalDateTime nextStartDate = calculateNextDate(lastBudget.getStartDate(), recurringBudget.getFrequency().name());
-            LocalDateTime nextEndDate = calculateEndDate(nextStartDate, recurringBudget.getFrequency().name());
+            LocalDateTime nextStartDate = null;
+            LocalDateTime nextEndDate = null;
+            if (budgets.isEmpty()) {
+                nextStartDate = calculateNextDate(recurringBudget.getStartDate(),
+                        recurringBudget.getFrequency().name());
+                nextEndDate = calculateEndDate(nextStartDate, recurringBudget.getFrequency().name());
+            } else {
+                Budget lastBudget = budgets.stream().findFirst().orElseThrow(() -> new BusinessException(BUDGET_NOT_FOUND));
+                nextStartDate = calculateNextDate(lastBudget.getStartDate(), recurringBudget.getFrequency().name());
+                nextEndDate = calculateEndDate(nextStartDate, recurringBudget.getFrequency().name());
+            }
             createBudget(recurringBudget, nextStartDate, nextEndDate);
         });
     }

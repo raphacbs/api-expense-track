@@ -31,6 +31,11 @@ services:
     container_name: api-expense-track
     networks:
       - my-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "tcp://127.0.0.1:12201"
+        tag: meu-primeiro-site
 networks:
   my-network:
     driver: bridge

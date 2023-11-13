@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @org.springframework.web.bind.annotation.ControllerAdvice(basePackages = {"com.coelho.brasileiro.expensetrack.controller",
-        "com.coelho.brasileiro.expensetrack.filter"})
+        "com.coelho.brasileiro.expensetrack.filter", "com.coelho.brasileiro.expensetrack.handle.actions"})
 public class ControllerAdvice {
     private final Logger logger = LoggerFactory.getLogger(ControllerAdvice.class);
 

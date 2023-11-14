@@ -31,7 +31,7 @@ public class UpdateUserFlowBuilder extends AFlowBuilder<UpdateUserFlowBuilder> {
                 .addAction(FindUserByEmailHandler.class)
                 .addAction(UpdateUserEntityHandler.class)
                 .addAction(SaveUserHandler.class)
-                .addAction(ConvertEntityToDtoHandler.class)
+                .addAction(ConvertUserEntityToUserDtoHandler.class)
                 .build();
         return this;
     }

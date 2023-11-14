@@ -1,5 +1,11 @@
 package com.coelho.brasileiro.expensetrack.model;
 
+import javax.persistence.*;
+import java.util.UUID;
+@Entity
 public abstract class AEntity implements IEntity{
-    abstract String getName();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private UUID id;
 }

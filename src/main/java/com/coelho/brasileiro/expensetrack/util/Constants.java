@@ -37,4 +37,18 @@ public class Constants {
         String RECURRING_BUDGET_DTO = RECURRING_BUDGET + "_DTO";
         String RECURRING_BUDGET_REQUEST = RECURRING_BUDGET + "_REQUEST";
     }
+
+    public interface PaymentMethod {
+        String PAYMENT_METHOD = "PAYMENT_METHOD";
+        String PAYMENT_METHOD_INPUT = PAYMENT_METHOD + "_INPUT";
+        String PAYMENT_METHOD_DTO = PAYMENT_METHOD + "_DTO";
+        String PAYMENT_METHOD_REQUEST = PAYMENT_METHOD + "_REQUEST";
+    }
+
+    public interface MoneyBox {
+        String MONEY_BOX = "MONEY_BOX";
+        String MONEY_BOX_INPUT = MONEY_BOX + "_INPUT";
+        String MONEY_BOX_DTO = MONEY_BOX + "_DTO";
+        String MONEY_BOX_REQUEST = MONEY_BOX + "_REQUEST";
+    }
 }

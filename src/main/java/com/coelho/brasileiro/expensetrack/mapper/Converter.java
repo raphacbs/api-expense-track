@@ -1,14 +1,8 @@
 package com.coelho.brasileiro.expensetrack.mapper;
 
-import com.coelho.brasileiro.expensetrack.dto.BudgetDto;
-import com.coelho.brasileiro.expensetrack.dto.CategoryDto;
-import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
-import com.coelho.brasileiro.expensetrack.dto.UserDto;
+import com.coelho.brasileiro.expensetrack.dto.*;
 import com.coelho.brasileiro.expensetrack.input.*;
-import com.coelho.brasileiro.expensetrack.model.Budget;
-import com.coelho.brasileiro.expensetrack.model.Category;
-import com.coelho.brasileiro.expensetrack.model.RecurringBudget;
-import com.coelho.brasileiro.expensetrack.model.User;
+import com.coelho.brasileiro.expensetrack.model.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -22,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", imports = {Page.class, DateTimeFormatter.class})
 
@@ -32,6 +25,11 @@ public interface Converter {
     @NullLocaDateToLocalDateTime
     default LocalDateTime nullLocaDateToLocalDateTime(LocalDate date) {
         return date != null ? date.atStartOfDay() : null;
+
+    }
+    @LocalDateTimeToString
+    default String localDateTimeToString(LocalDateTime date) {
+        return date != null ? date.format(DateTimeFormatter.ISO_DATE_TIME): null;
     }
 
     @NullToCategory
@@ -49,7 +47,30 @@ public interface Converter {
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
+    @interface LocalDateTimeToString {
+
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
     @interface NullToCategory {
+
+    }
+
+
+    @NullToCategory
+    default IEntity toEntityFromInput(Input input) {
+        if (input instanceof PaymentMethodInput) {
+            return toEntity((PaymentMethodInput) input);
+        }
+        return null;
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    @interface ToEntity {
 
     }
 
@@ -58,7 +79,8 @@ public interface Converter {
 
     com.coelho.brasileiro.expensetrack.model.User toEntity(LoginInput loginInputRequest);
 
-    @Mapping(target = "createdAt", expression = "java(user.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME))")
+    @Named("toUserDto")
+    @Mapping(target = "createdAt", qualifiedBy = LocalDateTimeToString.class)
     @Mapping(target = "initials", expression = "java(user.getFirstName().substring(0,1) + user.getLastName().substring(0,1))")
     UserDto toUserDto(com.coelho.brasileiro.expensetrack.model.User user);
 
@@ -79,7 +101,7 @@ public interface Converter {
 
     Category toEntity(CategoryDto categoryDto);
 
-    CategoryDto toCategoryDto(Category category);
+    CategoryDto toDto(Category category);
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "userId", source = "user.id")
@@ -95,7 +117,24 @@ public interface Converter {
 
     List<Category> toEntityList(List<CategoryDto> categories);
 
-    Category fromInput(CategoryInput categoryInput);
+    Category toEntity(CategoryInput categoryInput);
+
+    @Mapping(target = "isDeleted", expression = "java(false)")
+    PaymentMethod toEntity(PaymentMethodInput input);
+
+    @Mapping(target = "user", qualifiedByName = "toUserDto")
+    PaymentMethodDto toDto(PaymentMethod paymentMethod);
+
+
+    default <T extends Input, U extends IEntity> U toEntity(T input) {
+        MapperConverter<T, U, Dto> mapperConverter = new MapperConverter<>();
+        return mapperConverter.apply(input);
+    }
+
+    default <D extends Dto, E extends IEntity> D toDto(E entity) {
+        MapperConverter<Input, E, D> mapperConverter = new MapperConverter<>();
+        return mapperConverter.apply(entity);
+    }
 
     @Mapping(target = "active", expression = "java(true)")
     @Mapping(target = "id", expression = "java(map(budgetInput.getId()))")
@@ -132,8 +171,8 @@ public interface Converter {
         return UUID.fromString(value);
     }
 
-    default String map(UUID value){
-    	if(value == null){
+    default String map(UUID value) {
+        if (value == null) {
             return null;
         }
         return value.toString();
@@ -147,6 +186,7 @@ public interface Converter {
         return source;
     }
 
+
     default <T> ResponsePage<T> toResponsePage(Page<T> page) {
         ResponsePage<T> responsePage = new ResponsePage<>();
         responsePage.setItems(page.toList());
@@ -155,13 +195,14 @@ public interface Converter {
         responsePage.setPageSize(page.getSize());
         responsePage.setTotalPages(page.getTotalPages());
         responsePage.setTotalElements(page.getTotalElements());
+
         return responsePage;
     }
 
     default <T> ResponsePage<T> toResponsePage(Page<T> page, Class<T> clazz) {
         ResponsePage<T> responsePage = new ResponsePage<>();
 
-        if(clazz.isNestmateOf(Budget.class)){
+        if (clazz.isNestmateOf(Budget.class)) {
             List<Budget> budgets = (List<Budget>) page.toList();
             responsePage.setItems((List<T>) toBudgetListDto(budgets));
         }
@@ -173,4 +214,5 @@ public interface Converter {
         responsePage.setTotalElements(page.getTotalElements());
         return responsePage;
     }
+
 }

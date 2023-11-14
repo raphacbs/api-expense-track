@@ -30,7 +30,7 @@ public class RegisterUserFlowBuilder extends AFlowBuilder<RegisterUserFlowBuilde
                 .addAction(ConvertUserInputToUserHandler.class)
                 .addAction(VerifyIfUserExistHandler.class)
                 .addAction(SaveUserHandler.class)
-                .addAction(ConvertEntityToDtoHandler.class)
+                .addAction(ConvertUserEntityToUserDtoHandler.class)
                 .build();
         return this;
     }

@@ -21,8 +21,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(filterChainExceptionHandler, LogoutFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/budgets").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/api/v1/categories",
+                        "/api/v1/budgets",
+                        "/api/v1/payment-methods")
+                .permitAll()
+                .antMatchers(HttpMethod.POST,
+                        "/api/v1/categories",
+                        "/api/v1/budgets",
+                        "/api/v1/payment-methods")
+                .permitAll()
+                .antMatchers(HttpMethod.PUT,
+                        "/api/v1/categories",
+                        "/api/v1/budgets",
+                        "/api/v1/payment-methods")
+                .permitAll()
+                .antMatchers(HttpMethod.DELETE,
+                        "/api/v1/categories",
+                        "/api/v1/budgets",
+                        "/api/v1/payment-methods")
+                .permitAll()
+
                 .and().cors().and().csrf().disable();
     }
 }

@@ -2,6 +2,7 @@ package com.coelho.brasileiro.expensetrack.context;
 
 import com.coelho.brasileiro.expensetrack.dto.BudgetDto;
 import com.coelho.brasileiro.expensetrack.dto.CategoryDto;
+import com.coelho.brasileiro.expensetrack.dto.PaymentMethodDto;
 import com.coelho.brasileiro.expensetrack.dto.UserDto;
 import com.coelho.brasileiro.expensetrack.input.*;
 import com.coelho.brasileiro.expensetrack.util.Constants;
@@ -11,6 +12,8 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_DT
 import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY_DTO;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY_INPUT;
+import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PAYMENT_METHOD_DTO;
+import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PAYMENT_METHOD_INPUT;
 
 
 @Builder
@@ -73,4 +76,12 @@ public class DefaultContext extends BaseContext{
     public BudgetDto getBudgetDto() {
         return this.getDto(BUDGET_DTO, BudgetDto.class);
     }
+
+    public void setPaymentMethodInput(PaymentMethodInput input){
+        this.setInput(PAYMENT_METHOD_INPUT, input);
+    }
+    public PaymentMethodDto getPaymentMethodDto(){
+        return this.getDto(PAYMENT_METHOD_DTO, PaymentMethodDto.class);
+    }
+
 }

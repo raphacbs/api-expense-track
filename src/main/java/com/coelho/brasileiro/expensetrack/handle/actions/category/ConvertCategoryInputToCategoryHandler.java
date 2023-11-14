@@ -15,7 +15,7 @@ public class ConvertCategoryInputToCategoryHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
         CategoryInput categoryInput = context.getInput(CATEGORY_INPUT, CategoryInput.class);
-        Category  category = Converter.INSTANCE.fromInput(categoryInput);
+        Category  category = Converter.INSTANCE.toEntity(categoryInput);
         context.setEntity(CATEGORY,category);
     }
 }

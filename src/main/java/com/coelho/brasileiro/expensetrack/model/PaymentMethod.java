@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "payment_method")
 @Entity(name = "PaymentMethod")
-public class PaymentMethod implements IEntity{
+public class PaymentMethod extends AEntity implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -25,5 +25,9 @@ public class PaymentMethod implements IEntity{
 
     @Column(nullable = false)
     private Boolean isDeleted;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

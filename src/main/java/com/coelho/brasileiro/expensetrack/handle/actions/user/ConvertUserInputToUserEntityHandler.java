@@ -11,7 +11,7 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.User.USER;
 
 @Component
-public class ConvertInputToEntityHandler extends AbstractHandler {
+public class ConvertUserInputToUserEntityHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
 

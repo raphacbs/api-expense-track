@@ -9,7 +9,7 @@ import com.coelho.brasileiro.expensetrack.util.Constants;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConvertEntityToDtoHandler extends AbstractHandler {
+public class ConvertUserEntityToUserDtoHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
         User user = context.getEntity(Constants.User.USER, User.class);

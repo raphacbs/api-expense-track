@@ -14,7 +14,7 @@ services:
     networks:
       - my-network
   app:
-    image: openjdk:20
+    image: openjdk:19
     volumes:
       - ./target/api-expense-track.jar:/app/api-expense-track.jar
     depends_on:

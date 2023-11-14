@@ -2,12 +2,12 @@ package com.coelho.brasileiro.expensetrack.flow.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.input.LoginInput;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertInputToEntityHandler;
+import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertUserInputToUserEntityHandler;
 import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByEmailAndPasswordHandler;
 import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.FlowFactory;
 import com.coelho.brasileiro.expensetrack.handle.actions.ValidateInput;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertEntityToDtoHandler;
+import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertUserEntityToUserDtoHandler;
 import com.coelho.brasileiro.expensetrack.handle.actions.user.GenerateTokenHandler;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,9 @@ public class DoLoginFlowBuilder extends AFlowBuilder<DoLoginFlowBuilder> {
                 .start()
                 .context(context)
                 .addAction(validateInput)
-                .addAction(ConvertInputToEntityHandler.class)
+                .addAction(ConvertUserInputToUserEntityHandler.class)
                 .addAction(FindUserByEmailAndPasswordHandler.class)
-                .addAction(ConvertEntityToDtoHandler.class)
+                .addAction(ConvertUserEntityToUserDtoHandler.class)
                 .addAction(GenerateTokenHandler.class)
                 .build();
         return this;

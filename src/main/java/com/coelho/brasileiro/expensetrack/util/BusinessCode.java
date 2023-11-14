@@ -31,4 +31,10 @@ public interface BusinessCode {
         Integer BUDGET_INVALID_RECURRING_BUDGET_FREQUENCY = BUDGET + 120;
 
     }
+
+    interface  PaymentMethodCodes {
+        Integer PAYMENT_METHOD = 400000;
+        Integer PAYMENT_METHOD_ALREADY_EXISTS = PAYMENT_METHOD + 10;
+        Integer PAYMENT_METHOD_NOT_FOUND = PAYMENT_METHOD + 20;
+    }
 }

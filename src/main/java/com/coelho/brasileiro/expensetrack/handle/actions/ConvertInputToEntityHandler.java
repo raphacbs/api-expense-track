@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ConvertInputToEntityHandler<I extends Input, E extends IEntity> extends AbstractHandler {
+public class ConvertInputToEntityHandler extends AbstractHandler {
 
     @Override
     protected void doHandle(Context context) {
-        I input = (I) context.getInput(context.getEntityNameCurrent() + "_INPUT", Input.class);
-        E entity = Converter.INSTANCE.toEntity(input);
+        Input input = context.getInput(context.getEntityNameCurrent() + "_INPUT", Input.class);
+        IEntity entity  = Converter.INSTANCE.toEntity(input);
         context.setEntity(context.getEntityNameCurrent(), entity);
     }
 }

@@ -10,22 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RegisterEntityBuilder<I extends Input, E extends IEntity, D extends Dto>
-        extends AFlowBuilder<RegisterEntityBuilder<I,E,D>> {
+public class UpdateEntityBuilder<I extends Input, E extends IEntity, D extends Dto>
+        extends AFlowBuilder<UpdateEntityBuilder<I,E,D>> {
 
     private final FlowFactory flowFactory;
     private final InputValidator<I> inputValidator;
 
 
     @Autowired
-    public RegisterEntityBuilder(FlowFactory flowFactory, InputValidator<I> inputValidator) {
+    public UpdateEntityBuilder(FlowFactory flowFactory, InputValidator<I> inputValidator) {
         this.flowFactory = flowFactory;
         this.inputValidator = inputValidator;
-
     }
 
     @Override
-    public RegisterEntityBuilder<I, E, D> create(Context context) {
+    public UpdateEntityBuilder<I, E, D> create(Context context) {
         ValidateInput<I> validateInput = new ValidateInput<>(inputValidator);
 
         flow = flowFactory
@@ -33,7 +32,8 @@ public class RegisterEntityBuilder<I extends Input, E extends IEntity, D extends
                 .context(context)
                 .addAction(validateInput)
                 .addAction(ConvertInputToEntityHandler.class)
-                .addAction(VerifyEntityExistHandler.class)
+                .addAction(VerifyIfEntityNotExistHandler.class)
+                .addAction(UpdateEntityFromInputHandler.class)
                 .addAction(SaveEntityHandler.class)
                 .addAction(ConvertEntityToDtoHandler.class)
                 .build();

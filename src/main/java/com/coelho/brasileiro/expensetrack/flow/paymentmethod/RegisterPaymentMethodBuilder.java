@@ -17,26 +17,12 @@ public class RegisterPaymentMethodBuilder<I extends Input, E extends IEntity, D 
 
     private final FlowFactory flowFactory;
     private final InputValidator<I> inputValidator;
-    private final ConvertInputToEntityHandler<I, E> convertInputToEntityHandler;
-
-    private final VerifyEntityExistHandler verifyEntityExistHandler;
-
-    private final SaveEntityHandler saveEntityHandler;
-
-    private final ConvertEntityToDtoHandler<D,E> convertEntityToDtoHandler;
 
     @Autowired
-    public RegisterPaymentMethodBuilder(FlowFactory flowFactory, InputValidator<I> inputValidator,
-                                        ConvertInputToEntityHandler<I, E> convertInputToEntityHandler,
-                                        VerifyEntityExistHandler verifyEntityExistHandler,
-                                        SaveEntityHandler saveEntityHandler,
-                                        ConvertEntityToDtoHandler<D, E> convertEntityToDtoHandler) {
+    public RegisterPaymentMethodBuilder(FlowFactory flowFactory, InputValidator<I> inputValidator)                       {
         this.flowFactory = flowFactory;
         this.inputValidator = inputValidator;
-        this.convertInputToEntityHandler = convertInputToEntityHandler;
-        this.verifyEntityExistHandler = verifyEntityExistHandler;
-        this.saveEntityHandler = saveEntityHandler;
-        this.convertEntityToDtoHandler = convertEntityToDtoHandler;
+
     }
 
     @Override
@@ -47,12 +33,11 @@ public class RegisterPaymentMethodBuilder<I extends Input, E extends IEntity, D 
                 .start()
                 .context(context)
                 .addAction(validateInput)
-                .addAction(convertInputToEntityHandler)
-                .addAction(verifyEntityExistHandler)
-                .addAction(saveEntityHandler)
-                .addAction(convertEntityToDtoHandler)
+                .addAction(ConvertInputToEntityHandler.class)
+                .addAction(VerifyEntityExistHandler.class)
+                .addAction(SaveEntityHandler.class)
+                .addAction(ConvertEntityToDtoHandler.class)
                 .build();
         return this;
     }
 }
-//TODO tentar deixar o builder dinâmico

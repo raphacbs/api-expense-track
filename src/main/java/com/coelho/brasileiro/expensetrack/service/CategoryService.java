@@ -4,9 +4,9 @@ import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.CategoryDto;
 import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
 import com.coelho.brasileiro.expensetrack.flow.RegisterEntityBuilder;
+import com.coelho.brasileiro.expensetrack.flow.UpdateEntityBuilder;
 import com.coelho.brasileiro.expensetrack.flow.category.DeleteCategoryBuilder;
 import com.coelho.brasileiro.expensetrack.flow.category.FindCategoryBuilder;
-import com.coelho.brasileiro.expensetrack.flow.category.RegisterCategoryBuilder;
 import com.coelho.brasileiro.expensetrack.flow.category.UpdateCategoryBuilder;
 import com.coelho.brasileiro.expensetrack.input.CategoryInput;
 import com.coelho.brasileiro.expensetrack.model.Category;
@@ -21,16 +21,18 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGOR
 @Service
 public class CategoryService{
    private final UpdateCategoryBuilder updateCategoryBuilder;
+   private final UpdateEntityBuilder<CategoryInput, Category, CategoryDto> updateEntityBuilder;
    private final FindCategoryBuilder findCategoryBuilder;
    private final DeleteCategoryBuilder  deleteCategoryBuilder;
 
    private final RegisterEntityBuilder<CategoryInput, Category, CategoryDto> registerEntityBuilder;
 
     public CategoryService(UpdateCategoryBuilder updateCategoryBuilder,
-                           FindCategoryBuilder findCategoryBuilder,
+                           UpdateEntityBuilder<CategoryInput, Category, CategoryDto> updateEntityBuilder, FindCategoryBuilder findCategoryBuilder,
                            DeleteCategoryBuilder deleteCategoryBuilder,
                            RegisterEntityBuilder<CategoryInput, Category, CategoryDto> registerEntityBuilder) {
         this.updateCategoryBuilder = updateCategoryBuilder;
+        this.updateEntityBuilder = updateEntityBuilder;
         this.findCategoryBuilder = findCategoryBuilder;
         this.deleteCategoryBuilder = deleteCategoryBuilder;
         this.registerEntityBuilder = registerEntityBuilder;
@@ -57,7 +59,7 @@ public class CategoryService{
         DefaultContext  context = DefaultContext.builder().build();
         context.setCategoryInput(categoryInput);
         context.setEntityNameCurrent(CATEGORY);
-        updateCategoryBuilder.create(context).build().run();
+        updateEntityBuilder.create(context).build().run();
         return context.getCategoryDto();
     }
 

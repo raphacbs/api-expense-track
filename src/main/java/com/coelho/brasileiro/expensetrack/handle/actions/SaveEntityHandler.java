@@ -3,7 +3,6 @@ package com.coelho.brasileiro.expensetrack.handle.actions;
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.mapper.MapperSaveEntity;
-import com.coelho.brasileiro.expensetrack.mapper.MapperVerifyIfEntityExist;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
 import org.springframework.stereotype.Component;
 

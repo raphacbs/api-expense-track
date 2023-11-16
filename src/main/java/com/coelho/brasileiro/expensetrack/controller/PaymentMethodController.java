@@ -24,21 +24,21 @@ public class PaymentMethodController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody PaymentMethodInput paymentMethodInput) {
+    public ResponseEntity<?> create(@RequestBody PaymentMethodInput paymentMethodInput) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.paymentMethodService.create(paymentMethodInput));
     }
 
     @PutMapping(path = "/{id:^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$}")
-    public ResponseEntity<?> updateCategory(@RequestBody  PaymentMethodInput paymentMethodInput, @PathVariable("id") String id) {
+    public ResponseEntity<?> update(@RequestBody  PaymentMethodInput paymentMethodInput, @PathVariable("id") String id) {
         PaymentMethodInput input = new PaymentMethodInput(
+                id,
                 paymentMethodInput.getName(),
-                paymentMethodInput.getDescription(),
-                id);
+                paymentMethodInput.getDescription());
         return ResponseEntity.status(HttpStatus.OK).body(this.paymentMethodService.update(input));
     }
 
     @GetMapping
-    public ResponseEntity<?> findAllCategories(@RequestParam(value = Params.NAME, required = false) String name,
+    public ResponseEntity<?> findAll(@RequestParam(value = Params.NAME, required = false) String name,
                                                @RequestParam(value = Params.DESCRIPTION, required = false) String description,
                                                @RequestParam(value = Params.TYPE, required = false) String type,
                                                @RequestParam(value = "pageNo", defaultValue = "0", required = false) String pageNo,

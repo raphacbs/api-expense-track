@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class VerifyEntityExistHandler extends AbstractHandler {
+public class VerifyIfEntityNotExistHandler extends AbstractHandler {
 
     private final MapperVerifyEntity mapperVerifyIfExist;
 
-    public VerifyEntityExistHandler(MapperVerifyEntity mapperVerifyIfExist) {
+    public VerifyIfEntityNotExistHandler(MapperVerifyEntity mapperVerifyIfExist) {
         this.mapperVerifyIfExist = mapperVerifyIfExist;
     }
 
     @Override
     protected void doHandle(Context context) {
         IEntity entity = context.getEntity(context.getEntityNameCurrent(), IEntity.class);
-        mapperVerifyIfExist.apply(entity,context, true);
+        mapperVerifyIfExist.apply(entity,context, false);
     }
 }

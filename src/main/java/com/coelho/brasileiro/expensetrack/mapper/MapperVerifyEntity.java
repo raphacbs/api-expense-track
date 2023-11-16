@@ -15,27 +15,42 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static com.coelho.brasileiro.expensetrack.util.BusinessCode.CategoryCodes.CATEGORY_ALREADY_EXISTS;
+import static com.coelho.brasileiro.expensetrack.util.BusinessCode.CategoryCodes.CATEGORY_NOT_FOUND;
 import static com.coelho.brasileiro.expensetrack.util.BusinessCode.PaymentMethodCodes.PAYMENT_METHOD_ALREADY_EXISTS;
+import static com.coelho.brasileiro.expensetrack.util.BusinessCode.PaymentMethodCodes.PAYMENT_METHOD_NOT_FOUND;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY;
 import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PAYMENT_METHOD;
 
 @Component
-public class MapperVerifyIfEntityExist {
+public class MapperVerifyEntity {
 
     private final PaymentMethodRepository paymentMethodRepository;
     private final CategoryRepository categoryRepository;
-    private final Map<Class<? extends IEntity>, Function<Context, Context>> CLASS_FUNCTION_MAP = Map.of(
+    private final Map<Class<? extends IEntity>, Function<Context, Context>> mapperVerifyExist = Map.of(
             PaymentMethod.class, this::verifyIfPaymentMethodExist,
             Category.class, this::verifyIfCategoryExist
     );
 
-    public MapperVerifyIfEntityExist(PaymentMethodRepository paymentMethodRepository, CategoryRepository categoryRepository) {
+    private final Map<Class<? extends IEntity>, Function<Context, Context>> mapperVerifyNotExist = Map.of(
+            PaymentMethod.class, this::verifyIfPaymentMethodNotExist,
+            Category.class, this::verifyIfCategoryNotExist
+    );
+
+    public MapperVerifyEntity(PaymentMethodRepository paymentMethodRepository, CategoryRepository categoryRepository) {
         this.paymentMethodRepository = paymentMethodRepository;
         this.categoryRepository = categoryRepository;
         }
 
-    public void apply(IEntity entity, Context context) {
-        Function<Context, Context> function = CLASS_FUNCTION_MAP.get(entity.getClass());
+    public void apply(IEntity entity, Context context, boolean isExist) {
+        if(isExist){
+            apply(entity,context,mapperVerifyExist);
+        }else{
+            apply(entity,context,mapperVerifyNotExist);
+        }
+    }
+
+    private void apply(IEntity entity, Context context, Map<Class<? extends IEntity>, Function<Context, Context>> mapper) {
+        Function<Context, Context> function = mapper.get(entity.getClass());
         if (function == null) {
             throw new MapperVerifyIfEntityExistNotFoundException(MessageFormat.format("Mapping for {0} not found",
                     entity.getClass().getSimpleName()));
@@ -58,6 +73,24 @@ public class MapperVerifyIfEntityExist {
                     throw new BusinessException(CATEGORY_ALREADY_EXISTS);
                 }
         );
+        return context;
+    }
+
+    private Context verifyIfCategoryNotExist(Context context){
+        Category categoryToFind = context.getEntity(CATEGORY, Category.class);
+        Category categoryFounded = this.categoryRepository.findById(categoryToFind.getId())
+                .orElseThrow(() -> new BusinessException(CATEGORY_NOT_FOUND)
+                );
+        context.setEntity(CATEGORY,categoryFounded);
+        return context;
+    }
+
+    private Context verifyIfPaymentMethodNotExist(Context context){
+        PaymentMethod paymentMethod = context.getEntity(PAYMENT_METHOD, PaymentMethod.class);
+        PaymentMethod paymentMethodFound = this.paymentMethodRepository.findById(paymentMethod.getId())
+                .orElseThrow(() -> new BusinessException(PAYMENT_METHOD_NOT_FOUND)
+                );
+        context.setEntity(PAYMENT_METHOD,paymentMethodFound);
         return context;
     }
 

@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ConvertEntityToDtoHandler<D extends Dto, E extends IEntity> extends AbstractHandler {
+public class ConvertEntityToDtoHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
-        E entity = (E) context.getEntity(context.getEntityNameCurrent(), IEntity.class);
-        D dto = Converter.INSTANCE.toDto(entity);
+        IEntity entity =  context.getEntity(context.getEntityNameCurrent(), IEntity.class);
+        Dto dto = Converter.INSTANCE.toDto(entity);
         context.setDto(context.getEntityNameCurrent()+"_DTO", dto);
     }
 }

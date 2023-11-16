@@ -126,16 +126,6 @@ public interface Converter {
     PaymentMethodDto toDto(PaymentMethod paymentMethod);
 
 
-    default <T extends Input, U extends IEntity> U toEntity(T input) {
-        MapperConverter<T, U, Dto> mapperConverter = new MapperConverter<>();
-        return mapperConverter.apply(input);
-    }
-
-    default <D extends Dto, E extends IEntity> D toDto(E entity) {
-        MapperConverter<Input, E, D> mapperConverter = new MapperConverter<>();
-        return mapperConverter.apply(entity);
-    }
-
     @Mapping(target = "active", expression = "java(true)")
     @Mapping(target = "id", expression = "java(map(budgetInput.getId()))")
     @Mapping(target = "name", expression = "java(budgetInput.getName())")
@@ -160,6 +150,9 @@ public interface Converter {
     Category partialUpdate(CategoryInput categoryInput, @MappingTarget Category category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    PaymentMethod partialUpdate(PaymentMethodInput input, @MappingTarget PaymentMethod paymentMethod);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "startDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     @Mapping(target = "endDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     Budget partialUpdate(BudgetInput budgetInput, @MappingTarget Budget budget);
@@ -176,6 +169,21 @@ public interface Converter {
             return null;
         }
         return value.toString();
+    }
+
+    default <I extends Input, E extends IEntity> E partialUpdate(I input, E entity) {
+        MapperConverter<I, E, Dto> mapperConverter = new MapperConverter<>();
+        return mapperConverter.apply(input);
+    }
+
+    default <T extends Input, U extends IEntity> U toEntity(T input) {
+        MapperConverter<T, U, Dto> mapperConverter = new MapperConverter<>();
+        return mapperConverter.apply(input);
+    }
+
+    default <D extends Dto, E extends IEntity> D toDto(E entity) {
+        MapperConverter<Input, E, D> mapperConverter = new MapperConverter<>();
+        return mapperConverter.apply(entity);
     }
 
     ResponsePage<CategoryDto> toDtoPage(ResponsePage<Category> categories);

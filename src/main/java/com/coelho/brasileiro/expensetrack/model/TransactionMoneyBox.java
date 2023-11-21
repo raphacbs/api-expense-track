@@ -26,4 +26,5 @@ public class TransactionMoneyBox implements IEntity{
     private MoneyBox moneyBox;
 
 
+
 }

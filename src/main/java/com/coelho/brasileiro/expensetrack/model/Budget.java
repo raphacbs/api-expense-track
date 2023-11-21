@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "budget")
 @Entity(name = "Budget")
-public class Budget implements IEntity{
+public class Budget implements EntityDeletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)

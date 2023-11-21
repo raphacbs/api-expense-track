@@ -14,7 +14,7 @@ public class DeleteCategoryHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
         Category  category = context.getEntity(CATEGORY, Category.class);
-        category.setDeleted(true);
+        category.setIsDeleted(Boolean.TRUE);
         context.setEntity(CATEGORY, category);
     }
 }

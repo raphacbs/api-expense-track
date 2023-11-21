@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Table(name = "category")
-public class Category implements IEntity{
+public class Category implements EntityDeletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -32,5 +32,6 @@ public class Category implements IEntity{
     private TransactionTypeEnum type;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private Boolean isDeleted;
+
 }

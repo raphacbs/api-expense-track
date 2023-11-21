@@ -40,7 +40,6 @@ public class PaymentMethodController {
     @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(value = Params.NAME, required = false) String name,
                                                @RequestParam(value = Params.DESCRIPTION, required = false) String description,
-                                               @RequestParam(value = Params.TYPE, required = false) String type,
                                                @RequestParam(value = "pageNo", defaultValue = "0", required = false) String pageNo,
                                                @RequestParam(value = "pageSize", defaultValue = "10", required = false) String pageSize,
                                                @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
@@ -48,7 +47,6 @@ public class PaymentMethodController {
         Map<String, String> params = new HashMap<>();
         params.put(Params.NAME, name);
         params.put(Params.DESCRIPTION, description);
-        params.put(Params.TYPE, type);
         params.put(Params.NO_PAGE, pageNo);
         params.put(Params.PAGE_SIZE, pageSize);
         params.put(Params.SORT_BY, sortBy);

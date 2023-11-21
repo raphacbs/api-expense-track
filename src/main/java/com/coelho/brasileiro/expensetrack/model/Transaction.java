@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "transaction")
 @Entity(name = "Transaction")
-public class Transaction implements IEntity{
+public class Transaction implements EntityDeletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)

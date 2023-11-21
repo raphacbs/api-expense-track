@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Table(name = "recurring_transaction")
 @Entity(name = "RecurringTransaction")
-public class RecurringTransaction implements IEntity{
+public class RecurringTransaction implements EntityDeletable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)

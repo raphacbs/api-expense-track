@@ -25,5 +25,5 @@ public class TransactionBudget implements IEntity{
     @JoinColumn(name = "budget_id", referencedColumnName = "id")
     private Budget budget;
 
-
+    
 }

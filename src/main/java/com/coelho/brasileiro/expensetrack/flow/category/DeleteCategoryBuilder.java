@@ -27,8 +27,7 @@ public class DeleteCategoryBuilder extends AFlowBuilder<DeleteCategoryBuilder> {
                 .context(context)
                 .addAction(ConvertCategoryInputToCategoryHandler.class)
                 .addAction(VerifyIfCategoryNotExistHandler.class)
-                .addAction(UpdateCategoryInputToCategoryHandler.class)
-                .addAction(DeleteBudgetHandler.class)
+                .addAction(DeleteCategoryHandler.class)
                 .build();
         return this;
     }

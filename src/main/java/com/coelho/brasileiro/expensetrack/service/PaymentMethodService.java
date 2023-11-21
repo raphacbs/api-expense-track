@@ -4,6 +4,7 @@ package com.coelho.brasileiro.expensetrack.service;
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.PaymentMethodDto;
 import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
+import com.coelho.brasileiro.expensetrack.flow.DeleteEntityBuilder;
 import com.coelho.brasileiro.expensetrack.flow.RegisterEntityBuilder;
 import com.coelho.brasileiro.expensetrack.flow.UpdateEntityBuilder;
 import com.coelho.brasileiro.expensetrack.input.PaymentMethodInput;
@@ -20,11 +21,13 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PA
 public class PaymentMethodService {
 private final RegisterEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> registerEntityBuilder;
 private final UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder;
+private final DeleteEntityBuilder deleteEntityBuilder;
 
     public PaymentMethodService(RegisterEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> registerEntityBuilder,
-                                UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder) {
+                                UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder, DeleteEntityBuilder deleteEntityBuilder) {
         this.registerEntityBuilder = registerEntityBuilder;
         this.updateEntityBuilder = updateEntityBuilder;
+        this.deleteEntityBuilder = deleteEntityBuilder;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -38,6 +41,10 @@ private final UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMeth
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void delete(PaymentMethodInput input) {
+        DefaultContext context = DefaultContext.builder().build();
+        context.setPaymentMethodInput(input);
+        context.setEntityNameCurrent(PAYMENT_METHOD);
+        deleteEntityBuilder.create(context).build().run();
     }
 
     public ResponsePage<?> findAll(Map<String, String> params) {

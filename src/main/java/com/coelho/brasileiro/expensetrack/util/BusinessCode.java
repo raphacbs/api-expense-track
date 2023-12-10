@@ -1,6 +1,10 @@
 package com.coelho.brasileiro.expensetrack.util;
 
 public interface BusinessCode {
+    interface ValidationCodes {
+        Integer VALIDATION = 500000;
+        Integer VALIDATION_PARAMS = VALIDATION + 10;
+    }
     interface UserCodes{
         Integer USER = 100000;
         Integer PASSWORD_INVALID = USER + 10;
@@ -36,5 +40,6 @@ public interface BusinessCode {
         Integer PAYMENT_METHOD = 400000;
         Integer PAYMENT_METHOD_ALREADY_EXISTS = PAYMENT_METHOD + 10;
         Integer PAYMENT_METHOD_NOT_FOUND = PAYMENT_METHOD + 20;
+        Integer PAYMENT_METHOD_PARAMS = PAYMENT_METHOD + 30;
     }
 }

@@ -51,4 +51,11 @@ public class Constants {
         String MONEY_BOX_DTO = MONEY_BOX + "_DTO";
         String MONEY_BOX_REQUEST = MONEY_BOX + "_REQUEST";
     }
+
+    public interface Transaction {
+        String TRANSACTION = "TRANSACTION";
+        String TRANSACTION_INPUT = TRANSACTION + "_INPUT";
+        String TRANSACTION_DTO = TRANSACTION + "_DTO";
+
+    }
 }

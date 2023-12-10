@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -32,8 +33,8 @@ public class Transaction implements EntityDeletable{
     @Column(nullable = false)
     private Double totalValue;
 
-    @Column(nullable = false)
-    private LocalDate date;
+    @Column
+    private LocalDate paymentDate;
 
     @Column(nullable = false)
     private LocalDate dueDate;
@@ -48,29 +49,26 @@ public class Transaction implements EntityDeletable{
     private Integer currentInstallments;
 
     @Column(nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "parent_id")
     private UUID parentId;
 
-    @Column(nullable = false)
+    @Column
     private Boolean isRecurring;
-
-    @Column(nullable = false)
-    private Boolean isPaid;
 
     @Column
     private String merchant;
 
     @Enumerated(EnumType.STRING)
     @Column
-    private StatusEnum status;
+    private StatusTransactionEnum status;
 
     @Column
     private String tags;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
@@ -80,4 +78,7 @@ public class Transaction implements EntityDeletable{
     @ManyToOne
     @JoinColumn(name = "payment_method")
     private PaymentMethod paymentMethod;
+
+    @Column(name = "group_id")
+    private UUID groupId;
 }

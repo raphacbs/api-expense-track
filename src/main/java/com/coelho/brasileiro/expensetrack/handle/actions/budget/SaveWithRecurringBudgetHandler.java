@@ -7,17 +7,17 @@ import com.coelho.brasileiro.expensetrack.model.Budget;
 import com.coelho.brasileiro.expensetrack.model.RecurringBudget;
 import com.coelho.brasileiro.expensetrack.repository.BudgetRepository;
 import com.coelho.brasileiro.expensetrack.repository.RecurringBudgetRepository;
+import com.coelho.brasileiro.expensetrack.util.FrequencyUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.RecurringBudget.RECURRING_BUDGET;
+
 
 @Component
 public class SaveWithRecurringBudgetHandler extends AbstractHandler {
@@ -55,12 +55,12 @@ public class SaveWithRecurringBudgetHandler extends AbstractHandler {
         List<Budget> budgets = new ArrayList<>();
 
         while (currentDate.isBefore(endDate)) {
-            LocalDateTime endDateTemp = calculateEndDate(currentDate, recurringBudget.getFrequency().name());
+            LocalDateTime endDateTemp = FrequencyUtils.calculateEndDate(currentDate, recurringBudget.getFrequency());
             if(endDateTemp.isAfter(endDate)){
                 break;
             }
             createAndSaveBudget(recurringBudget, currentDate, endDateTemp, recurringBudgetSaved, budgets);
-            currentDate = calculateNextDate(currentDate, recurringBudget.getFrequency().name());
+            currentDate = FrequencyUtils.calculateNextDate(currentDate, recurringBudget.getFrequency());
         }
 
         budgetRepository.saveAll(budgets);
@@ -82,38 +82,7 @@ public class SaveWithRecurringBudgetHandler extends AbstractHandler {
         budgets.add(budget);
     }
 
-    private LocalDateTime calculateNextDate(LocalDateTime currentDate, String frequency) {
-        if ("MONTHLY".equals(frequency)) {
-            return currentDate.plusMonths(1);
-        } else if ("ANNUAL".equals(frequency)) {
-            return currentDate.plusYears(1);
-        } else if ("BIWEEKLY".equals(frequency)) {
-            return currentDate.plusWeeks(2);
-        } else if ("WEEKLY".equals(frequency)) {
-            return currentDate.plusWeeks(1);
-        } else if ("DAILY".equals(frequency)) {
-            return currentDate.plusDays(1);
-        } else {
-            throw new IllegalArgumentException("Invalid frequency: " + frequency);
-        }
-    }
 
-    private LocalDateTime calculateEndDate(LocalDateTime startDate, String frequency) {
-        switch (frequency) {
-            case "MONTHLY":
-                return startDate.minusDays(1).plusMonths(1).withHour(23).withMinute(59).withSecond(59);
-            case "ANNUAL":
-                return startDate.minusDays(1).plusYears(1).withHour(23).withMinute(59).withSecond(59);
-            case "BIWEEKLY":
-                return startDate.minusDays(1).plusWeeks(2).withHour(23).withMinute(59).withSecond(59);
-            case "WEEKLY":
-                return startDate.minusDays(1).plusWeeks(1).withHour(23).withMinute(59).withSecond(59);
-            case "DAILY":
-                return startDate.withHour(23).withMinute(59).withSecond(59);
-            default:
-                throw new IllegalArgumentException("Invalid frequency: " + frequency);
-        }
-    }
 
     private boolean verifyStartDate(LocalDateTime startDate) {
         return startDate != null;

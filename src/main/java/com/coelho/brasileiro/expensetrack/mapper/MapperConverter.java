@@ -5,9 +5,8 @@ import com.coelho.brasileiro.expensetrack.exception.MapperRegistryNotFoundExcept
 import com.coelho.brasileiro.expensetrack.input.CategoryInput;
 import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.input.PaymentMethodInput;
-import com.coelho.brasileiro.expensetrack.model.Category;
-import com.coelho.brasileiro.expensetrack.model.IEntity;
-import com.coelho.brasileiro.expensetrack.model.PaymentMethod;
+import com.coelho.brasileiro.expensetrack.input.TransactionInput;
+import com.coelho.brasileiro.expensetrack.model.*;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -17,17 +16,21 @@ import java.util.function.Function;
 public class MapperConverter<I extends Input,E extends IEntity, D extends Dto> {
     private static final Map<Class<? extends Input>, Function<Input, IEntity>> mapperFromInputToEntity = Map.of(
             PaymentMethodInput.class, input -> Converter.INSTANCE.toEntity((PaymentMethodInput) input),
-            CategoryInput.class, input -> Converter.INSTANCE.toEntity((CategoryInput)input)
+            CategoryInput.class, input -> Converter.INSTANCE.toEntity((CategoryInput)input),
+            TransactionInput.class, input -> Converter.INSTANCE.toEntity((TransactionInput) input)
     );
 
     private static final Map<Class<? extends IEntity>, Function<IEntity, Dto>> mapperFromEntityToDto = Map.of(
             PaymentMethod.class, input -> Converter.INSTANCE.toDto((PaymentMethod) input),
-            Category.class, input -> Converter.INSTANCE.toDto((Category)input)
+            Category.class, input -> Converter.INSTANCE.toDto((Category)input),
+            Transaction.class, input -> Converter.INSTANCE.toDto((Transaction) input),
+            Budget.class, input -> Converter.INSTANCE.toBudgetDto((Budget) input)
     );
 
     private static final Map<Class<? extends IEntity>, BiFunction<Input, IEntity, IEntity>> mapperUpdateEntityFromInput = Map.of(
             PaymentMethod.class, (input, entity) -> Converter.INSTANCE.partialUpdate((PaymentMethodInput)  input, (PaymentMethod) entity),
-            Category.class,  (input, entity) -> Converter.INSTANCE.partialUpdate((CategoryInput)  input, (Category) entity)
+            Category.class,  (input, entity) -> Converter.INSTANCE.partialUpdate((CategoryInput)  input, (Category) entity),
+            Transaction.class, (input, entity) -> Converter.INSTANCE.partialUpdate((TransactionInput) input, (Transaction) entity)
     );
 
     public E apply(I input) {

@@ -17,6 +17,7 @@ public class FilterConfig {
         filter.addUrlPatterns("/api/v1/budgets/*");
         filter.addUrlPatterns("/api/v1/categories/*");
         filter.addUrlPatterns("/api/v1/payment-methods/*");
+        filter.addUrlPatterns("/api/v1/transactions/*");
         return filter;
     }
 }

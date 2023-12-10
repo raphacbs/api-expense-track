@@ -23,21 +23,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,
                         "/api/v1/categories",
+                        "/api/v1/transactions",
                         "/api/v1/budgets",
                         "/api/v1/payment-methods")
                 .permitAll()
                 .antMatchers(HttpMethod.POST,
                         "/api/v1/categories",
+                        "/api/v1/transactions",
                         "/api/v1/budgets",
                         "/api/v1/payment-methods")
                 .permitAll()
                 .antMatchers(HttpMethod.PUT,
                         "/api/v1/categories",
+                        "/api/v1/transactions",
                         "/api/v1/budgets",
                         "/api/v1/payment-methods")
                 .permitAll()
                 .antMatchers(HttpMethod.DELETE,
                         "/api/v1/categories",
+                        "/api/v1/transactions",
                         "/api/v1/budgets",
                         "/api/v1/payment-methods")
                 .permitAll()

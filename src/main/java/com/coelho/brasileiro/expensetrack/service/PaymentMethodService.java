@@ -7,6 +7,7 @@ import com.coelho.brasileiro.expensetrack.dto.ResponsePage;
 import com.coelho.brasileiro.expensetrack.flow.DeleteEntityBuilder;
 import com.coelho.brasileiro.expensetrack.flow.RegisterEntityBuilder;
 import com.coelho.brasileiro.expensetrack.flow.UpdateEntityBuilder;
+import com.coelho.brasileiro.expensetrack.flow.paymentmethod.FindPaymentMethodBuilder;
 import com.coelho.brasileiro.expensetrack.input.PaymentMethodInput;
 import com.coelho.brasileiro.expensetrack.model.PaymentMethod;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,24 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PA
 
 @Service
 public class PaymentMethodService {
-private final RegisterEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> registerEntityBuilder;
-private final UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder;
-private final DeleteEntityBuilder deleteEntityBuilder;
+    private final RegisterEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> registerEntityBuilder;
+    private final UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder;
+    private final DeleteEntityBuilder deleteEntityBuilder;
 
-    public PaymentMethodService(RegisterEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> registerEntityBuilder,
-                                UpdateEntityBuilder<PaymentMethodInput, PaymentMethod, PaymentMethodDto> updateEntityBuilder, DeleteEntityBuilder deleteEntityBuilder) {
+    private final FindPaymentMethodBuilder findPaymentMethodBuilder;
+
+    public PaymentMethodService(RegisterEntityBuilder<PaymentMethodInput,
+            PaymentMethod, PaymentMethodDto> registerEntityBuilder,
+                                UpdateEntityBuilder<PaymentMethodInput,
+                                        PaymentMethod, PaymentMethodDto> updateEntityBuilder, DeleteEntityBuilder deleteEntityBuilder, FindPaymentMethodBuilder findPaymentMethodBuilder) {
         this.registerEntityBuilder = registerEntityBuilder;
         this.updateEntityBuilder = updateEntityBuilder;
         this.deleteEntityBuilder = deleteEntityBuilder;
+        this.findPaymentMethodBuilder = findPaymentMethodBuilder;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public PaymentMethodDto create(PaymentMethodInput input){
+    public PaymentMethodDto create(PaymentMethodInput input) {
         DefaultContext context = DefaultContext.builder().build();
         context.setPaymentMethodInput(input);
         context.setEntityNameCurrent(PAYMENT_METHOD);
@@ -48,12 +54,16 @@ private final DeleteEntityBuilder deleteEntityBuilder;
     }
 
     public ResponsePage<?> findAll(Map<String, String> params) {
-        return null;
+        DefaultContext  context = DefaultContext.builder().build();
+        context.setParams(params);
+        context.setEntityNameCurrent(PAYMENT_METHOD);
+        findPaymentMethodBuilder.create(context).build().run();
+        return context.getResponsePage();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PaymentMethodDto update(PaymentMethodInput input) {
-        DefaultContext  context = DefaultContext.builder().build();
+        DefaultContext context = DefaultContext.builder().build();
         context.setPaymentMethodInput(input);
         context.setEntityNameCurrent(PAYMENT_METHOD);
         updateEntityBuilder.create(context).build().run();

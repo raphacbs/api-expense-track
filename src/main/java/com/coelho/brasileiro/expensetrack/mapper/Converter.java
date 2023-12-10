@@ -70,8 +70,18 @@ public interface Converter {
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
-    @interface ToEntity {
+    @interface ToEntityDto {
 
+    }
+
+    @ToEntityDto
+    default Dto toEntityDto(IEntity entity) {
+
+        if(entity instanceof User) {
+            return toUserDto((User) entity);
+        }else{
+            return toDto(entity);
+        }
     }
 
 
@@ -105,13 +115,16 @@ public interface Converter {
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "userId", source = "user.id")
+    @Named("toBudgetDto")
     BudgetDto toBudgetDto(Budget budget);
 
+    @IterableMapping(qualifiedByName = "toBudgetDto")
     List<BudgetDto> toBudgetListDto(List<Budget> budget);
 
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "userId", source = "user.id")
     BudgetDto toBudgetDto(RecurringBudget recurringBudget);
+
 
     List<CategoryDto> toDtoList(List<Category> categories);
 
@@ -122,9 +135,20 @@ public interface Converter {
     @Mapping(target = "isDeleted", expression = "java(false)")
     PaymentMethod toEntity(PaymentMethodInput input);
 
-    @Mapping(target = "user", qualifiedByName = "toUserDto")
-    PaymentMethodDto toDto(PaymentMethod paymentMethod);
+    @Mapping(target = "category", expression = "java(Category.builder().id(UUID.fromString(transactionInput.getCategoryId())).build())")
+    @Mapping(target = "paymentMethod", expression = "java(PaymentMethod.builder().id(UUID.fromString(transactionInput.getPaymentMethodId())).build())")
+    @Mapping(target = "isDeleted", expression = "java(false)")
+    Transaction toEntity(TransactionInput transactionInput);
 
+    @Mapping(target = "user", qualifiedByName = "toUserDto")
+    TransactionDto toDto(Transaction transaction);
+
+    List<TransactionDto> toDto(List<Transaction> transactions);
+
+    @Mapping(target = "user", qualifiedByName = "toUserDto")
+    @Named("toPaymentMethodDto")
+    PaymentMethodDto toDto(PaymentMethod paymentMethod);
+    List<PaymentMethodDto> toPaymentMethodDto(List<PaymentMethod> paymentMethods);
 
     @Mapping(target = "active", expression = "java(true)")
     @Mapping(target = "id", expression = "java(map(budgetInput.getId()))")
@@ -152,6 +176,8 @@ public interface Converter {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     PaymentMethod partialUpdate(PaymentMethodInput input, @MappingTarget PaymentMethod paymentMethod);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Transaction partialUpdate(TransactionInput transactionInput, @MappingTarget Transaction transaction);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "startDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     @Mapping(target = "endDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
@@ -210,10 +236,19 @@ public interface Converter {
     default <T> ResponsePage<T> toResponsePage(Page<T> page, Class<T> clazz) {
         ResponsePage<T> responsePage = new ResponsePage<>();
 
-        if (clazz.isNestmateOf(Budget.class)) {
-            List<Budget> budgets = (List<Budget>) page.toList();
-            responsePage.setItems((List<T>) toBudgetListDto(budgets));
-        }
+        List<IEntity> list = (List<IEntity>) page.toList();
+        List<Dto> entityList = toListDto(list);
+        responsePage.setItems((List<T>) entityList);
+
+//        if (clazz.isNestmateOf(Budget.class)) {
+//            List<Budget> budgets = (List<Budget>) page.toList();
+//            responsePage.setItems((List<T>) toBudgetListDto(budgets));
+//        }
+//
+//        if(clazz.isNestmateOf(PaymentMethod.class)) {
+//            List<PaymentMethod> paymentMethods = (List<PaymentMethod>) page.toList();
+//            responsePage.setItems((List<T>) toPaymentMethodDto(paymentMethods));
+//        }
 
         responsePage.setPageNo(page.getNumber() + 1);
         responsePage.setLast(page.isLast());
@@ -222,5 +257,13 @@ public interface Converter {
         responsePage.setTotalElements(page.getTotalElements());
         return responsePage;
     }
+
+    @IterableMapping(qualifiedBy = ToEntityDto.class)
+    List<Dto> toListDto(List<IEntity> list);
+
+//    @IterableMapping(qualifiedBy = ToEntityDto.class)
+//    <T> List<? extends IEntity> toListDto(List<T> list);
+
+
 
 }

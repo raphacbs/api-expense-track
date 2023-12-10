@@ -1,9 +1,6 @@
 package com.coelho.brasileiro.expensetrack.context;
 
-import com.coelho.brasileiro.expensetrack.dto.BudgetDto;
-import com.coelho.brasileiro.expensetrack.dto.CategoryDto;
-import com.coelho.brasileiro.expensetrack.dto.PaymentMethodDto;
-import com.coelho.brasileiro.expensetrack.dto.UserDto;
+import com.coelho.brasileiro.expensetrack.dto.*;
 import com.coelho.brasileiro.expensetrack.input.*;
 import com.coelho.brasileiro.expensetrack.util.Constants;
 import lombok.Builder;
@@ -14,6 +11,8 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGOR
 import static com.coelho.brasileiro.expensetrack.util.Constants.Category.CATEGORY_INPUT;
 import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PAYMENT_METHOD_DTO;
 import static com.coelho.brasileiro.expensetrack.util.Constants.PaymentMethod.PAYMENT_METHOD_INPUT;
+import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTION_DTO;
+import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTION_INPUT;
 
 
 @Builder
@@ -82,6 +81,13 @@ public class DefaultContext extends BaseContext{
     }
     public PaymentMethodDto getPaymentMethodDto(){
         return this.getDto(PAYMENT_METHOD_DTO, PaymentMethodDto.class);
+    }
+
+    public void setTransactionInput(TransactionInput input){
+        this.setInput(TRANSACTION_INPUT, input);
+    }
+    public TransactionDto  getTransactionDto(){
+        return this.getDto(TRANSACTION_DTO, TransactionDto.class);
     }
 
 }

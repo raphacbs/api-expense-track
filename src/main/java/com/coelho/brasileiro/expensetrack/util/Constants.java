@@ -54,6 +54,7 @@ public class Constants {
 
     public interface Transaction {
         String TRANSACTION = "TRANSACTION";
+        String TRANSACTIONS = "TRANSACTIONS";
         String TRANSACTION_INPUT = TRANSACTION + "_INPUT";
         String TRANSACTION_DTO = TRANSACTION + "_DTO";
 

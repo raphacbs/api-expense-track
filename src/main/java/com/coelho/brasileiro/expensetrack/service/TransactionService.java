@@ -2,12 +2,14 @@ package com.coelho.brasileiro.expensetrack.service;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
+import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.transaction.RegisterTransactionBuilder;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.model.FrequencyEnum;
 import com.coelho.brasileiro.expensetrack.model.StatusTransactionEnum;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.util.FrequencyUtils;
+import jakarta.inject.Named;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,9 +24,11 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRAN
 
 @Service
 @AllArgsConstructor
+
 public class TransactionService {
 
-    private final RegisterTransactionBuilder registerTransactionBuilder;
+    @Named("registerTransactionBuilder")
+    private final AFlowBuilder<RegisterTransactionBuilder> registerTransactionBuilder;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionDto saveTransaction(TransactionInput input) {

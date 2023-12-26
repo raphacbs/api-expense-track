@@ -6,12 +6,16 @@ import com.coelho.brasileiro.expensetrack.flow.FlowFactory;
 import com.coelho.brasileiro.expensetrack.handle.actions.ConvertEntityToDtoHandler;
 import com.coelho.brasileiro.expensetrack.handle.actions.ConvertInputToEntityHandler;
 import com.coelho.brasileiro.expensetrack.handle.actions.ValidateInput;
+import com.coelho.brasileiro.expensetrack.handle.transaction.SaveTransactionBudgetHandler;
 import com.coelho.brasileiro.expensetrack.handle.transaction.SaveTransactionHandler;
+import com.coelho.brasileiro.expensetrack.handle.transaction.SaveTransactionMoneyBoxHandler;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
+import jakarta.inject.Named;
 import org.springframework.stereotype.Component;
 
 @Component
+@Named("registerTransactionBuilder")
 public class RegisterTransactionBuilder extends AFlowBuilder<RegisterTransactionBuilder> {
 
     private final FlowFactory flowFactory;
@@ -31,6 +35,8 @@ public class RegisterTransactionBuilder extends AFlowBuilder<RegisterTransaction
                 .addAction(validateInput)
                 .addAction(ConvertInputToEntityHandler.class)
                 .addAction(SaveTransactionHandler.class)
+                .addAction(SaveTransactionBudgetHandler.class)
+                .addAction(SaveTransactionMoneyBoxHandler.class)
                 .addAction(ConvertEntityToDtoHandler.class)
                 .build();
 

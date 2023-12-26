@@ -19,11 +19,11 @@ public class Checks {
     public static boolean isNotNull(Object object) {
         return object != null;
     }
-    public static boolean isEmpty(String string) {
+    public static boolean isEmptyOrNull(String string) {
         return string == null || string.isEmpty();
     }
-    public static boolean isNotEmpty(String string) {
-        return !isEmpty(string);
+    public static boolean isNotEmptyOrNotNull(String string) {
+        return !isEmptyOrNull(string);
     }
 
 }

@@ -3,11 +3,10 @@ package com.coelho.brasileiro.expensetrack.handle.transaction;
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
-import com.coelho.brasileiro.expensetrack.model.Budget;
-import com.coelho.brasileiro.expensetrack.model.Transaction;
-import com.coelho.brasileiro.expensetrack.model.TransactionBudget;
-import com.coelho.brasileiro.expensetrack.predicate.TransactionBudgetPredicate;
+import com.coelho.brasileiro.expensetrack.model.*;
+import com.coelho.brasileiro.expensetrack.predicate.IsNotEmptyOrNotNullPredicate;
 import com.coelho.brasileiro.expensetrack.repository.TransactionBudgetRepository;
+import com.coelho.brasileiro.expensetrack.repository.TransactionMoneyBoxRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,28 +17,28 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRAN
 
 @Component
 
-public class SaveTransactionBudgetHandler extends AbstractHandler {
+public class SaveTransactionMoneyBoxHandler extends AbstractHandler {
 
-    private final TransactionBudgetPredicate  transactionBudgetPredicate;
-    private final TransactionBudgetRepository transactionBudgetRepository;
+    private final IsNotEmptyOrNotNullPredicate isNotEmptyOrNotNullPredicate;
+    private final TransactionMoneyBoxRepository transactionMoneyBoxRepository;
 
-    public SaveTransactionBudgetHandler(TransactionBudgetRepository transactionBudgetRepository) {
-        this.transactionBudgetPredicate = new TransactionBudgetPredicate();
-        this.transactionBudgetRepository = transactionBudgetRepository;
+    public SaveTransactionMoneyBoxHandler(TransactionMoneyBoxRepository transactionMoneyBoxRepository) {
+        this.isNotEmptyOrNotNullPredicate = new IsNotEmptyOrNotNullPredicate();
+        this.transactionMoneyBoxRepository = transactionMoneyBoxRepository;
     }
 
     @Override
     protected void doHandle(Context context) {
         TransactionInput input = context.getInput(TRANSACTION_INPUT, TransactionInput.class);
-        if(transactionBudgetPredicate.test(input)){
+        if(isNotEmptyOrNotNullPredicate.test(input.getMoneyBoxId())){
             List<Transaction> transactions = context.getEntities(TRANSACTIONS, Transaction.class);
             for(Transaction transaction : transactions){
-                TransactionBudget transactionBudget = TransactionBudget
+                TransactionMoneyBox transactionMoneyBox = TransactionMoneyBox
                         .builder()
-                        .budget(Budget.builder().id(UUID.fromString(input.getBudgetId())).build())
+                        .moneyBox(MoneyBox.builder().id(UUID.fromString(input.getMoneyBoxId())).build())
                         .transaction(transaction)
                         .build();
-                transactionBudgetRepository.save(transactionBudget);
+                transactionMoneyBoxRepository.save(transactionMoneyBox);
             }
         }
     }

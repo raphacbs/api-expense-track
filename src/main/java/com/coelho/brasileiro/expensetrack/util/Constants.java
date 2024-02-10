@@ -59,4 +59,9 @@ public class Constants {
         String TRANSACTION_DTO = TRANSACTION + "_DTO";
 
     }
+
+    public interface Topic {
+        String TOPIC_FREQUENCIA_MENSAL_A_PROCESSAR = "FREQUENCIA_MENSAL_A_PROCESSAR";
+
+    }
 }

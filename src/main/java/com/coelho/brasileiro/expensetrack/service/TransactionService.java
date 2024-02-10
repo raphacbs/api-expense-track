@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static com.coelho.brasileiro.expensetrack.util.Checks.isNull;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTION;
@@ -39,8 +41,8 @@ public class TransactionService {
         return context.getTransactionDto();
     }
 
-    public void deleteTransaction() {
-
+    public boolean deleteTransaction(UUID transactionId) {
+    return false;
     }
 
     public void updateTransaction() {
@@ -55,7 +57,7 @@ public class TransactionService {
 
     }
 
-    public Transaction createNextTransaction(Transaction transaction) {
+    public Transaction createNextInstallmentTransaction(Transaction transaction) {
         LocalDateTime nextDate = FrequencyUtils.calculateNextDate(transaction.getDueDate().atStartOfDay(), FrequencyEnum.MONTHLY);
         return Transaction.builder()
                 .type(transaction.getType())
@@ -80,7 +82,7 @@ public class TransactionService {
                 .build();
     }
 
-    public void setTransactionStatus(Transaction transaction) {
+    public void setTransactionStatusByDate(Transaction transaction) {
 
         LocalDate paymentDate = transaction.getPaymentDate();
         LocalDate dueDate = transaction.getDueDate();
@@ -96,4 +98,18 @@ public class TransactionService {
         }
     }
 
+    public List<Transaction> getTransactionsByPeriodAndFilters(LocalDate startDate,
+                                                               LocalDate endDate,
+                                                               UUID categoryId,
+                                                               UUID budgetId) {
+        return null;
+    }
+
+    public boolean payTransaction(UUID transactionId) {
+        return false;
+    }
+
+    public Transaction editTransaction(UUID transactionId, TransactionInput input) {
+        return null;
+    }
 }

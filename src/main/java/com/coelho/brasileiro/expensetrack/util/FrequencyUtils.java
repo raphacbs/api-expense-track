@@ -4,6 +4,7 @@ package com.coelho.brasileiro.expensetrack.util;
 import com.coelho.brasileiro.expensetrack.model.FrequencyEnum;
 import lombok.experimental.UtilityClass;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @UtilityClass
@@ -20,6 +21,11 @@ public class FrequencyUtils {
         };
     }
 
+    public LocalDateTime calculateNextDate(LocalDate currentDate, FrequencyEnum frequency) {
+        LocalDateTime localDateTime = currentDate.atStartOfDay();
+        return calculateNextDate( localDateTime,  frequency);
+    }
+
     public LocalDateTime calculateEndDate(LocalDateTime startDate, FrequencyEnum frequency) {
         return switch (frequency) {
             case MONTHLY -> startDate.minusDays(1).plusMonths(1).withHour(23).withMinute(59).withSecond(59);
@@ -28,5 +34,10 @@ public class FrequencyUtils {
             case WEEKLY -> startDate.minusDays(1).plusWeeks(1).withHour(23).withMinute(59).withSecond(59);
             case DAILY -> startDate.withHour(23).withMinute(59).withSecond(59);
         };
+    }
+
+    public LocalDateTime calculateEndDate(LocalDate startDate, FrequencyEnum frequency) {
+        LocalDateTime localDateTime = startDate.atStartOfDay();
+        return calculateEndDate(localDateTime, frequency);
     }
 }

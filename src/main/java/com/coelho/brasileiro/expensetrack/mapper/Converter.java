@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", imports = {Page.class, DateTimeFormatter.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", imports = {Page.class, DateTimeFormatter.class, LocalDate.class})
 
 public interface Converter {
     Converter INSTANCE = Mappers.getMapper(Converter.class);
@@ -166,6 +166,13 @@ public interface Converter {
     @Mapping(target = "startDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     @Mapping(target = "endDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     RecurringBudget fromInputToRecurringBudget(BudgetInput budgetInput, User user, Category category);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isDeleted", expression = "java(false)")
+    @Mapping(target = "user",  expression = "java(user)")
+    @Mapping(target = "type", expression = "java(Enum.valueOf( TransactionTypeEnum.class, transactionInput.getType() ))")
+    @Mapping(target = "createdAt",  expression = "java(LocalDate.now())")
+    @Mapping(target = "isActive",expression = "java(true)")
+    RecurringTransaction fromInputToRecurringTransaction(  TransactionInput transactionInput, @Context User user, @Context Category category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Category partialUpdate(CategoryDto categoryDto, @MappingTarget Category category);

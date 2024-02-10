@@ -1,5 +1,6 @@
 package com.coelho.brasileiro.expensetrack.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,9 +35,11 @@ public class Transaction implements EntityDeletable{
     private Double totalValue;
 
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate paymentDate;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
     @Column(nullable = false)
@@ -49,6 +52,7 @@ public class Transaction implements EntityDeletable{
     private Integer currentInstallments;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "parent_id")

@@ -42,4 +42,8 @@ public interface Context {
 
     void addResponsePage(ResponsePage<?> responsePage);
     ResponsePage<?> getResponsePage();
+
+    void setTopicMessage(String topicMessage);
+    String getTopicMessage();
+
 }

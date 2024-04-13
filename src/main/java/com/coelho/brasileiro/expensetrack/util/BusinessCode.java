@@ -42,4 +42,10 @@ public interface BusinessCode {
         Integer PAYMENT_METHOD_NOT_FOUND = PAYMENT_METHOD + 20;
         Integer PAYMENT_METHOD_PARAMS = PAYMENT_METHOD + 30;
     }
+    interface  TransactionCodes {
+        Integer TRANSACTION_METHOD = 600000;
+        Integer TRANSACTION_METHOD_ALREADY_EXISTS = TRANSACTION_METHOD + 10;
+        Integer TRANSACTION_METHOD_NOT_FOUND = TRANSACTION_METHOD + 20;
+        Integer TRANSACTION_METHOD_PARAMS = TRANSACTION_METHOD + 30;
+    }
 }

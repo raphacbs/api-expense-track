@@ -26,11 +26,9 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRAN
 
 @Service
 @AllArgsConstructor
-
 public class TransactionService {
 
-    @Named("registerTransactionBuilder")
-    private final AFlowBuilder<RegisterTransactionBuilder> registerTransactionBuilder;
+    private final RegisterTransactionBuilder registerTransactionBuilder;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionDto saveTransaction(TransactionInput input) {

@@ -32,11 +32,12 @@ public class SaveTransactionHandler extends AbstractHandler {
         this.transactionRepository = transactionRepository;
         this.transactionService = transactionService;
         this.userService = userService;
-        this.transactionsToSave = new ArrayList<>();
+
     }
 
     @Override
     protected void doHandle(Context context) {
+        this.transactionsToSave = new ArrayList<>();
         this.context = context;
         generateInstallmentTransactions();
         context.setEntities(TRANSACTIONS, transactionsToSave);

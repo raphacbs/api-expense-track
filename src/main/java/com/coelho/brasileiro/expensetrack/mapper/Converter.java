@@ -185,10 +185,20 @@ public interface Converter {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Transaction partialUpdate(TransactionInput transactionInput, @MappingTarget Transaction transaction);
+
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "startDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     @Mapping(target = "endDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     Budget partialUpdate(BudgetInput budgetInput, @MappingTarget Budget budget);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user",  expression = "java(user)")
+    @Mapping(target = "createdAt",  expression = "java(LocalDate.now())")
+    @Mapping(target = "isActive",  expression = "java(Boolean.TRUE)")
+    @Mapping(target = "isFixedValue",  expression = "java(Boolean.FALSE)")
+    @Mapping(target = "isDeleted",  expression = "java(Boolean.FALSE)")
+    RecurringTransaction fromTransactionInput(TransactionInput input, @Context User user);
 
     default UUID map(String value) {
         if (value == null) {

@@ -1,5 +1,7 @@
 package com.coelho.brasileiro.expensetrack.util;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class Constants {
 
     public interface User{
@@ -63,5 +65,8 @@ public class Constants {
     public interface Topic {
         String TOPIC_FREQUENCIA_MENSAL_A_PROCESSAR = "FREQUENCIA_MENSAL_A_PROCESSAR";
 
+
     }
+
+
 }

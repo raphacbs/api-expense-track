@@ -1,8 +1,6 @@
 package com.coelho.brasileiro.expensetrack.input;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -11,9 +9,11 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class TransactionInput extends AInput{
     @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|null", message = "id must be a valid UUID or null")
+    @Setter
     private String id;
     @NotNull(message = "Type is mandatory")
     @Pattern(regexp = "^[ER]$", message = "Type must be 'E' or 'R'")
@@ -45,18 +45,14 @@ public class TransactionInput extends AInput{
     private String categoryId;
     @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|null", message = "Payment id must be a valid UUID or null")
     private String paymentMethodId;
-    @Pattern(regexp = "^(ANNUAL|MONTHLY|WEEKLY|DAILY|BIWEEKLY)$", message = "Type must be 'A', 'M', 'W', 'D', or 'BW'")
+    @Pattern(regexp = "^(ANNUAL|MONTHLY|WEEKLY|DAILY|BIWEEKLY)$", message = "Type must be 'ANNUAL', 'MONTHLY', 'WEEKLY', 'DAILY', or 'BIWEEKLY'")
     private String frequency;
     @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|null", message = "Budget id must be a valid UUID or null")
     private String budgetId;
     @Pattern(regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|null", message = "MoneyBox id must be a valid UUID or null")
     private String moneyBoxId;
-
-
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Due date must be in the format YYYY-MM-DD")
     private String startDate;
-
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Due date must be in the format YYYY-MM-DD")
     private String endDate;
-
 }

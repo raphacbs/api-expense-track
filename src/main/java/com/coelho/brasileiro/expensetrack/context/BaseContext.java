@@ -8,8 +8,6 @@ import com.coelho.brasileiro.expensetrack.model.IEntity;
 import org.springframework.data.domain.*;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +26,8 @@ public abstract class BaseContext implements Context {
     private Page<?> page;
 
     private ResponsePage<?> responsePage;
+
+    private String topicMessage;
 
 
     @Override
@@ -200,4 +200,15 @@ public abstract class BaseContext implements Context {
     public ResponsePage<?> getResponsePage() {
         return responsePage;
     }
+
+    @Override
+    public String getTopicMessage(){
+        return this.topicMessage;
+    }
+
+    @Override
+    public void setTopicMessage(String topicMessage){
+        this.topicMessage = topicMessage;
+    }
+
 }

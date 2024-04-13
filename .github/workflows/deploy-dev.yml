@@ -87,4 +87,4 @@ jobs:
             fi
             
             docker build -t $IMAGE_NAME -f $PATH_DOCKERFILE $PATH_TARGET
-            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $PORT:$PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$PORT $IMAGE_NAME
+            docker run -d --name $CONTAINER_NAME --network $NETWORK_NAME -p $PORT:$PORT -v $JAR_FILE_PATH:/app/api-expense-track.jar -e DATABASE_HOST=$DATABASE_HOST -e DATABASE_USER=$DATABASE_USER -e DATABASE_PASSWORD=$DATABASE_PASSWORD -e expense.track.jwt.secret=$EXPENSE_TRACK_JWT_SECRET -e TZ=$TZ -e server.port=$PORT $IMAGE_NAME -e spring.kafka.consumer.group-id=api-expense-track

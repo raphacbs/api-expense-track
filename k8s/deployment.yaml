@@ -6,6 +6,11 @@ spec:
   selector:
     matchLabels:
       app: expensetrackapi
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8082
+      targetPort: 8082
   template:
     metadata:
       labels:

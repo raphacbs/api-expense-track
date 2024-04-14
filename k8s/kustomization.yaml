@@ -9,4 +9,4 @@ namespace: expensetrack
 images:
 - name: expensetrackapi
   newName: raphacbs/api-expense-track
-  newTag: eeb40395ea13748d418138f050e89b258964380f
+  newTag: bc0297894dff4bd3dfa964837576d6419d79ef3c

@@ -33,6 +33,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+
       - name: kustomize
         uses: imranismail/setup-kustomize@v1
         with:
@@ -41,7 +42,7 @@ jobs:
       - name: update k8s
         run: |
           cd k8s
-          kustomize edit image expensetrackapi=raphacbs/api-expense-track:${{ github.sha }}
+          kustomize edit set image expensetrackapi=raphacbs/api-expense-track:${{ github.sha }}
           cat kustomization.yaml
 
       - name: commit

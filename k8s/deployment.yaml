@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expensetrackapi
+spec:
+  selector:
+    matchLabels:
+      app: expensetrackapi
+  template:
+    metadata:
+      labels:
+        app: expensetrackapi
+    spec:
+      containers:
+      - name: expensetrackapi
+        image: expensetrackapi
+        ports:
+        - containerPort: 8082
+        env:
+          - name: spring.datasource.url
+            value: "jdbc:postgresql://diycompany.online/diyrdsexpensedev"
+          - name: spring.datasource.username
+            value: "usrdiy"
+          - name: spring.datasource.password
+            value: "V73XNZ7shFY7Qa^Z"
+          - name: spring.jpa.show-sql
+            value: "false"
+          - name: spring.jpa.generate-ddl
+            value: "false"
+          - name: spring.jpa.hibernate.ddl-auto
+            value: "update"
+          - name: spring.jpa.properties.hibernate.dialect
+            value: "org.hibernate.dialect.PostgreSQLDialect"
+          - name: spring.task.scheduling.pool.size
+            value: "1"
+          - name: server.port
+            value: "8082"
+          - name: expense.track.jwt.secret
+            value: "expensetrack"
+          - name: spring.kafka.bootstrap-servers
+            value: "127.0.0.1:9092"
+          - name: spring.kafka.consumer.group-id
+            value: "api-expense-track"
+          - name: spring.kafka.consumer.auto-offset-reset
+            value: "earliest"
+          - name: topic.transacao.mensal.a.salvar
+            value: "TRANSACAO_MENSAL_A_SALVAR"
+          - name: topic.transacao.mensal.a.criar
+            value: "TRANSACAO_MENSAL_A_CRIAR"

@@ -1,0 +1,28 @@
+name: CD
+on:
+  push:
+    branches: [dev]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-lasted
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests=true
+
+      - name: Build image and push to docker hub
+        uses: docker/build-push-action@v1.1.0
+        with:
+          username: raphacbs
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: raphacbs/api-expense-track
+          tags: ${{ github.sha }}, latest

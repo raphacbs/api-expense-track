@@ -27,7 +27,7 @@ jobs:
           repository: raphacbs/api-expense-track
           tags: ${{ github.sha }}, latest
   deploy:
-    name: Build
+    name: Deploy
     runs-on: ubuntu-lasted
     needs: build
     steps:

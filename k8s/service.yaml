@@ -6,8 +6,5 @@ spec:
   selector:
     app: expensetrackapi
   ports:
-    - name: http
-      protocol: TCP
-      port: 8082
+    - port: 8082
       targetPort: 8082
-  type: LoadBalancer

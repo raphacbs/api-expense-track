@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-lasted
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2

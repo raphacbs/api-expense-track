@@ -26,3 +26,30 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: raphacbs/api-expense-track
           tags: ${{ github.sha }}, latest
+  deploy:
+    name: Build
+    runs-on: ubuntu-lasted
+    needs: build
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: kustomize
+        uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize_version: v3.6.1
+
+      - name: update k8s
+        run: |
+          cd k8s
+          kustomize edit image expensetrackapi=raphacbs/api-expense-track:${{ github.sha }}
+          cat kustomization.yaml
+
+      - name: commit
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Deploy Action"
+          git commit -am "change image tag"
+          
+      - name: push
+        uses: ad-m/github-push-action@master
+

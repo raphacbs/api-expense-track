@@ -1,12 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - deployment.yaml
-  - service.yaml
+- deployment.yaml
+- service.yaml
 
 namespace: expensetrack
 
 images:
-  - name: expensetrackapi
-    newName: expensetrackapi
-    newTag: v1
+- name: expensetrackapi
+  newName: raphacbs/api-expense-track
+  newTag: ca72fba5aae97109aaf2eb4499b94bff49bb9f5f

@@ -3,9 +3,9 @@ package com.coelho.brasileiro.expensetrack.handle.transaction;
 import com.coelho.brasileiro.expensetrack.context.Context;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
+import com.coelho.brasileiro.expensetrack.message.KafkaProducerService;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.repository.TransactionRepository;
-import com.coelho.brasileiro.expensetrack.message.KafkaProducerService;
 import com.coelho.brasileiro.expensetrack.service.TransactionService;
 import com.coelho.brasileiro.expensetrack.service.UserService;
 import com.coelho.brasileiro.expensetrack.util.PropertiesConfig;
@@ -14,11 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.coelho.brasileiro.expensetrack.util.Checks.isNotEmptyOrNotNull;
-import static com.coelho.brasileiro.expensetrack.util.Constants.Topic.TOPIC_FREQUENCIA_MENSAL_A_PROCESSAR;
-import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.*;
+import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTIONS;
+import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTION_INPUT;
 
 @Component
 public class SendMessageRecurringTransactionHandler extends AbstractHandler {

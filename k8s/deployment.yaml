@@ -38,7 +38,7 @@ spec:
           - name: expense.track.jwt.secret
             value: "expensetrack"
           - name: spring.kafka.bootstrap-servers
-            value: "127.0.0.1:9092"
+            value: "diycompany.online:9091"
           - name: spring.kafka.consumer.group-id
             value: "api-expense-track"
           - name: spring.kafka.consumer.auto-offset-reset

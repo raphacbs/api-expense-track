@@ -3,6 +3,11 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - service.yaml
+- expensetrack-ingress.yaml
+- certificate.yaml
+- clusterissuer.yaml
+- pvc.yaml
+- storegeclass.yaml
 
 namespace: expensetrack
 

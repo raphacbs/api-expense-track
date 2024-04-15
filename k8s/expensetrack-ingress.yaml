@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: expensetrack-ingress
+  namespace: expensetrack
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: expensetrackapi
+                port:
+                  number: 8082
+  tls:
+    - hosts:
+        - localhost
+      secretName: letsencrypt2

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vaultwarden-cert2
+  namespace: vaultwarden
+spec:
+  secretName: letsencrypt2
+  issueRef:
+    name: letsencrypt
+    kiind: ClusterIssuer
+  commonName: localhost
+  dnsNames:
+    - localhost

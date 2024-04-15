@@ -15,7 +15,3 @@ spec:
                 name: expensetrackapi
                 port:
                   number: 8082
-  tls:
-    - hosts:
-        - localhost
-      secretName: letsencrypt2

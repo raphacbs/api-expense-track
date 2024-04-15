@@ -3,15 +3,10 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - service.yaml
-- expensetrack-ingress.yaml
-- certificate.yaml
-- clusterissuer.yaml
-- pvc.yaml
-- storegeclass.yaml
 
 namespace: expensetrack
 
 images:
 - name: expensetrackapi
   newName: raphacbs/api-expense-track
-  newTag: b79a31efd5c993d7c9383b6488081d243c527d73
+  newTag: b7c8cc9c1b92f12cf808c86aa5d4d6f14f567c36

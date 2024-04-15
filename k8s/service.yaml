@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: expensetrackapi-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: expensetrackapi
   ports:

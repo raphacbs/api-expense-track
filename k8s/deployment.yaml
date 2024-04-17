@@ -18,11 +18,11 @@ spec:
         - containerPort: 8082
         env:
           - name: spring.datasource.url
-            value: "jdbc:postgresql://diycompany.online/diyrdsexpensedev"
+            value: "jdbc:postgresql://diycompany.online/rds-expensetrack-dev"
           - name: spring.datasource.username
-            value: "usrdiy"
+            value: "postgres"
           - name: spring.datasource.password
-            value: "V73XNZ7shFY7Qa^Z"
+            value: "h7#gT@9W&4K2yUj!"
           - name: spring.jpa.show-sql
             value: "false"
           - name: spring.jpa.generate-ddl

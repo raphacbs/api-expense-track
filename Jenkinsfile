@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'seu_usuario/sua_imagem:tag' // Substitua pelo nome da sua imagem no Docker Hub
+        DOCKER_IMAGE = 'raphacbs/api-expense-track:latest'
         CONTAINER_NAME = 'expense-tracker-dev'
+        NETWORK_NAME = 'services'
         SPRING_DATASOURCE_URL = "jdbc:postgresql://diycompany.online/rds-expensetrack-dev"
         SPRING_DATASOURCE_USERNAME = "postgres"
         SPRING_DATASOURCE_PASSWORD = "h7#gT@9W&4K2yUj!"
@@ -39,7 +40,7 @@ pipeline {
         stage('Baixar e executar nova imagem') {
             steps {
                 script {
-                    def dockerRunCommand = "docker run -d --name ${CONTAINER_NAME}"
+                    def dockerRunCommand = "docker run -d --name ${CONTAINER_NAME} --network ${NETWORK_NAME} -p ${SERVER_PORT}:${SERVER_PORT}"
 
                     // Adicionando as variáveis de ambiente no comando docker run
                     dockerRunCommand += " -e spring.datasource.url=${SPRING_DATASOURCE_URL}"

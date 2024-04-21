@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", imports = {Page.class, DateTimeFormatter.class, LocalDate.class})
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring", imports = {Page.class, DateTimeFormatter.class, LocalDate.class, MoneyBox.class})
 
 public interface Converter {
     Converter INSTANCE = Mappers.getMapper(Converter.class);
@@ -198,7 +198,11 @@ public interface Converter {
     @Mapping(target = "isActive",  expression = "java(Boolean.TRUE)")
     @Mapping(target = "isFixedValue",  expression = "java(Boolean.FALSE)")
     @Mapping(target = "isDeleted",  expression = "java(Boolean.FALSE)")
+    @Mapping(target = "paymentMethod", expression = "java(input.getPaymentMethodId() != null ? PaymentMethod.builder().id(UUID.fromString(input.getPaymentMethodId())).build() : null)")
+    @Mapping(target = "moneyBox", expression = "java(input.getMoneyBoxId() != null ? MoneyBox.builder().id(UUID.fromString(input.getMoneyBoxId())).build() : null)")
+    @Mapping(target = "budget", expression = "java(input.getBudgetId() != null ? Budget.builder().id(UUID.fromString(input.getBudgetId())).build() : null)")
     RecurringTransaction fromTransactionInput(TransactionInput input, @Context User user);
+
 
     default UUID map(String value) {
         if (value == null) {

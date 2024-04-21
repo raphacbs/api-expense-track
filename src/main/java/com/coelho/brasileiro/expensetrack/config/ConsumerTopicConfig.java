@@ -18,7 +18,7 @@ public class ConsumerTopicConfig {
     private final KafkaProperties kafkaProperties;
 
     @Bean
-    public KafkaConsumerService<TransactionInput> consumerService(SaveRecurringTransactionHandler handler){
+    public KafkaConsumerService<TransactionInput> consumerServiceSaveRecurringTransaction(SaveRecurringTransactionHandler handler){
         return new ConsumerTopicBuilder<>(TransactionInput.class)
                 .kafkaProperties(kafkaProperties)
                 .topic(config.getTopicTransacaoMensalASalvar())

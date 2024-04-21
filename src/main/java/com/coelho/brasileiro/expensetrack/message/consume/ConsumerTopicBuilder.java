@@ -44,6 +44,7 @@ public class ConsumerTopicBuilder<T> {
 
     public KafkaConsumerService<T> build() {
         ConcurrentKafkaListenerContainerFactory<String, T> factory = kafkaListenerContainerFactory();
+        log.info("Iniciando inscrição para consumir mensagens do tópico: {}", topicName);
         return new KafkaConsumerService<>(factory, topicName, handler, getKey());
     }
 

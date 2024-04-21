@@ -58,4 +58,21 @@ public class RecurringTransaction implements EntityDeletable{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "group_id")
+    private UUID groupId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "payment_method")
+    private PaymentMethod paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "money_box_id")
+    private MoneyBox moneyBox;
+
+    @ManyToOne
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
+
+
 }

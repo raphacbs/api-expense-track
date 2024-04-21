@@ -62,10 +62,11 @@ public class Constants {
 
     }
 
-    public interface Topic {
-        String TOPIC_FREQUENCIA_MENSAL_A_PROCESSAR = "FREQUENCIA_MENSAL_A_PROCESSAR";
-
-
+    public interface RecurringTransaction {
+        String RECURRING_TRANSACTION = "RECURRING_TRANSACTION";
+        String RECURRING_TRANSACTION_INPUT = RECURRING_TRANSACTION + "_INPUT";
+        String RECURRING_TRANSACTION_DTO = RECURRING_TRANSACTION + "_DTO";
+        String RECURRING_TRANSACTION_REQUEST = RECURRING_TRANSACTION + "_REQUEST";
     }
 
 

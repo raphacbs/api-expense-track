@@ -27,7 +27,7 @@ public class ConsumerTopicBuilder<T> {
         this.type = type;
     }
 
-    public ConsumerTopicBuilder<T> topic(String topicName) {
+    public ConsumerTopicBuilder<T> sourceTopic(String topicName) {
         this.topicName = topicName;
         return this;
     }

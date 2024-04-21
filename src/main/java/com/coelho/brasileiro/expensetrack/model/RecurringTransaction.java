@@ -1,9 +1,11 @@
 package com.coelho.brasileiro.expensetrack.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -48,6 +50,9 @@ public class RecurringTransaction implements EntityDeletable{
     @Column(nullable = false)
     private LocalDate createdAt;
 
+    @Column
+    private LocalDateTime lastProcessing;
+
     @Column(nullable = false)
     private Boolean isDeleted;
 
@@ -74,5 +79,8 @@ public class RecurringTransaction implements EntityDeletable{
     @JoinColumn(name = "budget_id")
     private Budget budget;
 
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dueDate;
 
 }

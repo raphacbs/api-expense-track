@@ -27,6 +27,12 @@ public interface Converter {
         return date != null ? date.atStartOfDay() : null;
 
     }
+
+    @NullLocaDateToLocalDateTime
+    default LocalDate nullLocaDateToLocal(LocalDate date) {
+        return date != null ? date : null;
+
+    }
     @LocalDateTimeToString
     default String localDateTimeToString(LocalDateTime date) {
         return date != null ? date.format(DateTimeFormatter.ISO_DATE_TIME): null;
@@ -41,6 +47,13 @@ public interface Converter {
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
     @interface NullLocaDateToLocalDateTime {
+
+    }
+
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    @interface NullLocaDateToLocalDate {
 
     }
 
@@ -202,6 +215,12 @@ public interface Converter {
     @Mapping(target = "moneyBox", expression = "java(input.getMoneyBoxId() != null ? MoneyBox.builder().id(UUID.fromString(input.getMoneyBoxId())).build() : null)")
     @Mapping(target = "budget", expression = "java(input.getBudgetId() != null ? Budget.builder().id(UUID.fromString(input.getBudgetId())).build() : null)")
     RecurringTransaction fromTransactionInput(TransactionInput input, @Context User user);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "paymentMethod", source = "paymentMethod")
+    @Mapping(target = "isRecurring", expression = "java(Boolean.TRUE)")
+    @Mapping(target = "createdAt", qualifiedBy = NullLocaDateToLocalDateTime.class)
+    Transaction fromRecurringTransaction(RecurringTransaction recurringTransaction);
 
 
     default UUID map(String value) {

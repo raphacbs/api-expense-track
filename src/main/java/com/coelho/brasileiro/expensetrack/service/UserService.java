@@ -71,7 +71,7 @@ public class UserService {
         return context.getUserDto();
     }
 
-    public Object update(UUID id, UserUpdate userRequest) {
+    public UserDto update(UUID id, UserUpdate userRequest) {
         DefaultContext context = DefaultContext.builder().build();
         context.setUserUpdate(userRequest);
         context.setEntityNameCurrent("USER");

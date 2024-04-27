@@ -1,6 +1,8 @@
 package com.coelho.brasileiro.expensetrack.model;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,5 +31,11 @@ public class PaymentMethod  implements EntityDeletable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonCreator
+    public PaymentMethod(@JsonProperty("id") String id) {
+        this.id = UUID.fromString(id);
+    }
+
 
 }

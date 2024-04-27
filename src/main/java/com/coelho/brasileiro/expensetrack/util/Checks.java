@@ -96,6 +96,10 @@ public class Checks {
         return object != null;
     }
 
+    public static boolean isNotNullAndNotEqual(String object, String value) {
+        return object != null && !object.equals(value);
+    }
+
     /**
      * The {@code isEmptyOrNull} method checks if the provided string is either null or empty.
      *

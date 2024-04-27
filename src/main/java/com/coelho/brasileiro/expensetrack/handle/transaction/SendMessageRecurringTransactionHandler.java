@@ -8,7 +8,7 @@ import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.repository.TransactionRepository;
 import com.coelho.brasileiro.expensetrack.service.TransactionService;
 import com.coelho.brasileiro.expensetrack.service.UserService;
-import com.coelho.brasileiro.expensetrack.util.PropertiesConfig;
+import com.coelho.brasileiro.expensetrack.config.PropertiesConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

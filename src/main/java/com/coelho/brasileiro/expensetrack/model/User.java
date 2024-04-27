@@ -1,6 +1,8 @@
 package com.coelho.brasileiro.expensetrack.model;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,6 +38,11 @@ public class User implements IEntity{
 
     @Column(name = "google_account_id")
     private String googleAccountId;
+
+    @JsonCreator
+    public User(@JsonProperty("user_id") String id) {
+        this.id = UUID.fromString(id);
+    }
 
 
 }

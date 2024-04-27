@@ -1,8 +1,10 @@
 package com.coelho.brasileiro.expensetrack.message.consume;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
+import com.coelho.brasileiro.expensetrack.dto.Dto;
 import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.input.Input;
+import com.coelho.brasileiro.expensetrack.model.IEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -34,7 +36,15 @@ public class KafkaConsumerService<T> {
         ConcurrentMessageListenerContainer<String, T> container = factory.createContainer(topicName);
         container.setupMessageListener((MessageListener<String, T>) message -> {
             DefaultContext context = DefaultContext.builder().build();
-            context.setInput(key, (Input) message.value());
+            
+           if(key.toLowerCase().contains("input")){
+               context.setInput(key, (Input) message.value());
+           } else if (key.toLowerCase().contains("dto")) {
+               context.setDto(key, (Dto) message.value());
+           }else {
+               context.setEntity(key, (IEntity) message.value());
+           }
+
             handler.handle(context);
             log.info("Mensagem recebida: {} ", message.value());
         });

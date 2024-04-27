@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,16 +55,15 @@ public class ConsumerTopicBuilder<T> {
 
     private ConsumerFactory<String, T> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>(kafkaProperties.buildConsumerProperties());
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        configProps.put(JsonDeserializer.VALUE_DEFAULT_TYPE, type);
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomDeserializer.class);
+        configProps.put("value.deserializer.type", type);
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 
     private String getKey(){
         String className = type.getSimpleName();
         String[] words = StringUtils.splitByCharacterTypeCamelCase(className);
-        String key = String.join("_", words).toUpperCase();
-        return key;
+        return String.join("_", words).toUpperCase();
     }
 
 }

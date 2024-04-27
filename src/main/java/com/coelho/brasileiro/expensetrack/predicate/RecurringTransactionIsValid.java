@@ -5,20 +5,22 @@ import com.coelho.brasileiro.expensetrack.model.RecurringTransaction;
 import java.time.LocalDate;
 import java.util.function.Predicate;
 
+import static com.coelho.brasileiro.expensetrack.util.Checks.isNotNull;
+import static com.coelho.brasileiro.expensetrack.util.Checks.isNull;
+
 public class RecurringTransactionIsValid implements Predicate<RecurringTransaction> {
     @Override
     public boolean test(RecurringTransaction recurringTransaction) {
         LocalDate today = LocalDate.now();
         LocalDate startDate = recurringTransaction.getStartDate();
         LocalDate endDate = recurringTransaction.getEndDate();
-        LocalDate lastProcessing = recurringTransaction.getLastProcessing().toLocalDate();
+        LocalDate lastProcessing = isNotNull(recurringTransaction.getLastProcessing()) ? recurringTransaction.getLastProcessing().toLocalDate() : null;
 
         return recurringTransaction.getIsActive() &&
                 !recurringTransaction.getIsDeleted() &&
-                !today.isEqual(lastProcessing) &&
-                 today.isAfter(lastProcessing) &&
+                (isNull(lastProcessing) || !today.isEqual(lastProcessing) || today.isAfter(lastProcessing)) &&
                 (endDate) != null ?
-                (today.isAfter(startDate) || today.isEqual(startDate)) && (today.isEqual(endDate) || today.isBefore(endDate))
-                        : (today.isAfter(startDate) || today.isEqual(startDate));
+                (startDate.isBefore(today) || today.isEqual(startDate)) && ( endDate.isAfter(today) ||today.isEqual(endDate))
+                        : (startDate.isBefore(today) || today.isEqual(startDate));
     }
 }

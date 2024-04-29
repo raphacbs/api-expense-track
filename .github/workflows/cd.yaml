@@ -38,7 +38,9 @@ jobs:
           mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
 
       - name: Set Jar Filename
-        run: echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
+        run: |
+          echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
+          echo "JAR_FILE = $JAR_FILE" 
 
       - name: Build with Maven
         run: mvn clean install -DskipTests=true

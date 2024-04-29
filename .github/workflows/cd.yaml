@@ -1,7 +1,7 @@
 name: CD
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 jobs:
   build:
     name: Build
@@ -16,8 +16,32 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Get Current Version
+        id: get_version
+        run: echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
+
+      - name: Increment Version
+        run: |
+          CURRENT_VERSION="${{ steps.get_version.outputs.VERSION }}"
+          NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          echo "New version: $NEW_VERSION"
+          echo "PROJECT_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+
+      - name: Load project version
+        id: load_version
+        run: echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
+
+      - name: Increment version
+        run: |
+          VERSION=${{ steps.load_version.outputs.VERSION }}
+          mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
+
+      - name: Set Jar Filename
+        run: echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
+
       - name: Build with Maven
-        run: mvn clean package -DskipTests=true
+        run: mvn clean install -DskipTests=true
 
       - name: Build image and push to docker hub
         uses: docker/build-push-action@v1.1.0
@@ -25,7 +49,18 @@ jobs:
           username: raphacbs
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: raphacbs/api-expense-track
-          tags: ${{ github.sha }}, latest
+          tags: ${{ secrets.PROJECT_VERSION }}, latest
+
+      - name: Update Secret
+        uses: actions/setup-python@v2 # Use uma ação que tenha suporte para alterar secrets
+        with:
+          python-version: '3.x' # Você pode usar qualquer versão suportada do Python
+          script: |
+            echo "$PROJECT_VERSION" # Verifica se a variável está corretamente definida
+            echo "$PROJECT_VERSION" > secret.txt # Escreve a versão em um arquivo temporário
+            gh secret set PROJECT_VERSION -b "$(cat secret.txt)" # Atualiza a secret PROJECT_VERSION
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} # Necessário para autenticar a ação
   deploy:
     name: Deploy
     runs-on: ubuntu-latest

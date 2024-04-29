@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.coelho.expensetrack</groupId>
 	<artifactId>expense-track</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.0</version>
 	<name>ExpenseTrack</name>
 	<description>Aplicação de gerenciamento de despesas pessoais</description>
 	<properties>
@@ -135,7 +135,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>api-expense-track</finalName>
+		<!--		<finalName>api-expense-track</finalName>-->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -170,6 +170,25 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+					<newVersion>${project.version}</newVersion>
+				</configuration>
+				<executions>
+					<execution>
+						<id>set-project-version</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>set</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

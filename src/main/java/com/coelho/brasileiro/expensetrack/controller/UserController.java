@@ -1,12 +1,12 @@
 package com.coelho.brasileiro.expensetrack.controller;
 
 
+import com.coelho.brasileiro.expensetrack.dto.TokenDto;
 import com.coelho.brasileiro.expensetrack.dto.UserDto;
 import com.coelho.brasileiro.expensetrack.input.LoginInput;
 import com.coelho.brasileiro.expensetrack.input.UserInput;
 import com.coelho.brasileiro.expensetrack.input.UserUpdate;
 import com.coelho.brasileiro.expensetrack.service.UserService;
-import com.coelho.brasileiro.expensetrack.dto.TokenDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +43,12 @@ public class UserController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody UserUpdate userRequest){
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.update(id, userRequest));
+    }
+
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+            description = "Usuário cadastrado com sucesso")
+    @PostMapping("/health")
+    public ResponseEntity<?> health(@RequestBody UserInput userInput) {
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

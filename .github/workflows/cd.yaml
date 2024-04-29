@@ -38,10 +38,9 @@ jobs:
           mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
 
       - name: Set Jar Filename
-        run: |
-          echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
-          echo "JAR_FILE = $JAR_FILE" 
-          echo "::set-env name=JAR_FILE::$JAR_FILE"
+        run: echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" > jar_file.env
+      - name: Load Jar Filename
+        run: source jar_file.env
 
       - name: Verify Jar Filename
         run: echo "JAR_FILE = $JAR_FILE"

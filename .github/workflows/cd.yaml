@@ -39,6 +39,10 @@ jobs:
           VERSION=${{ steps.set_project_version.outputs.VERSION }}
           mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
 
+      - name: Update application.properties with version
+        run: |
+          echo "version=${{ env.NEW_VERSION }}" >> src/main/resources/application.properties
+
       - name: Set Jar Filename
         run: echo "JAR_FILE=api-expense-track-${{ steps.set_project_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
 
@@ -70,7 +74,7 @@ jobs:
         run: |
           echo "$NEW_VERSION" | gh secret set PROJECT_VERSION -b -
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     name: Deploy

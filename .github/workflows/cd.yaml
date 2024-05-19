@@ -18,29 +18,31 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Get Current Version
-        id: get_version
-        run: |
-          echo "Current Project Version: ${{ secrets.PROJECT_VERSION }}"
-          echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
+      #      - name: Get Current Version
+      #        id: get_version
+      #        run: |
+      #          echo "Current Project Version: ${{ secrets.PROJECT_VERSION }}"
+      #          echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
 
-      - name: Increment Version
-        id: increment_version
-        run: |
-          CURRENT_VERSION="${{ steps.get_version.outputs.VERSION }}"
-          if [[ ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Invalid version format. Resetting to 0.0.0"
-            CURRENT_VERSION="0.0.0"
-          fi
-          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
-          VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
-          NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
-          echo "New version: $NEW_VERSION"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+      #      - name: Increment Version
+      #        id: increment_version
+      #        run: |
+      #          CURRENT_VERSION="${{ steps.get_version.outputs.VERSION }}"
+      #          if [[ ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      #            echo "Invalid version format. Resetting to 0.0.0"
+      #            CURRENT_VERSION="0.0.0"
+      #          fi
+      #          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+      #          VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
+      #          NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
+      #          echo "New version: $NEW_VERSION"
+      #          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Set Project Version
         id: set_project_version
-        run: echo "::set-output name=VERSION::${{ env.NEW_VERSION }}"
+        run: |
+          NEW_VERSION="0.0.${{ GITHUB_RUN_NUMBER }}"
+          echo "::set-output name=VERSION::${{ env.NEW_VERSION }}"
 
       - name: Update Maven Project Version
         run: |

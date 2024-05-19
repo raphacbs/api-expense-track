@@ -2,10 +2,12 @@ name: CD
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -21,26 +23,24 @@ jobs:
         run: echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
 
       - name: Increment Version
+        id: increment_version
         run: |
           CURRENT_VERSION="${{ steps.get_version.outputs.VERSION }}"
           NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
           echo "New version: $NEW_VERSION"
-          echo "PROJECT_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
+      - name: Set Project Version
+        id: set_project_version
+        run: echo "::set-output name=VERSION::${{ env.NEW_VERSION }}"
 
-      - name: Load project version
-        id: load_version
-        run: echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
-
-      - name: Increment version
+      - name: Update Maven Project Version
         run: |
-          VERSION=${{ steps.load_version.outputs.VERSION }}
+          VERSION=${{ steps.set_project_version.outputs.VERSION }}
           mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
 
       - name: Set Jar Filename
-        run: echo "JAR_FILE=api-expense-track-${{ steps.load_version.outputs.VERSION }}.jar" > jar_file.env
-      - name: Load Jar Filename
-        run: source jar_file.env
+        run: echo "JAR_FILE=api-expense-track-${{ steps.set_project_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
 
       - name: Verify Jar Filename
         run: echo "JAR_FILE = $JAR_FILE"
@@ -50,31 +50,39 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -DskipTests=true
 
-      - name: Build image and push to docker hub
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v1.1.0
         with:
-          username: raphacbs
+          username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: raphacbs/api-expense-track
-          tags: ${{ secrets.PROJECT_VERSION }}, latest
+          tags: ${{ env.NEW_VERSION }}, latest
 
-      - name: Update Secret
-        uses: actions/setup-python@v2 # Use uma ação que tenha suporte para alterar secrets
+      - name: Update Project Version Secret
+        uses: actions/github-script@v3
         with:
-          python-version: '3.x' # Você pode usar qualquer versão suportada do Python
           script: |
-            echo "$PROJECT_VERSION" # Verifica se a variável está corretamente definida
-            echo "$PROJECT_VERSION" > secret.txt # Escreve a versão em um arquivo temporário
-            gh secret set PROJECT_VERSION -b "$(cat secret.txt)" # Atualiza a secret PROJECT_VERSION
+            const newVersion = process.env.NEW_VERSION;
+            const { GITHUB_TOKEN } = process.env;
+            const octokit = new github.getOctokit(GITHUB_TOKEN);
+            await octokit.actions.createOrUpdateRepoSecret({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              secret_name: 'PROJECT_VERSION',
+              encrypted_value: newVersion,
+            });
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} # Necessário para autenticar a ação
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - name: Deploy to Jenkins
         run: curl -u ${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_PASSWORD }} http://diycompany.online:8080/job/EXPENSE-TRACK-DEV/build?token=expense-track-dev
+
 
 #  deploy:
 ##    name: Deploy

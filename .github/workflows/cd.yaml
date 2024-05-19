@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "$NEW_VERSION" | gh secret set PROJECT_VERSION -b -
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 
   deploy:
     name: Deploy

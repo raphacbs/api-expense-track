@@ -64,10 +64,14 @@ jobs:
           script: |
             const newVersion = process.env.NEW_VERSION;
             const { GITHUB_TOKEN } = process.env;
-            const octokit = new github.getOctokit(GITHUB_TOKEN);
+            const github = require('@actions/github');
+            const octokit = github.getOctokit(GITHUB_TOKEN);
+            const owner = github.context.repo.owner;
+            const repo = github.context.repo.repo;
+            
             await octokit.actions.createOrUpdateRepoSecret({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               secret_name: 'PROJECT_VERSION',
               encrypted_value: newVersion,
             });

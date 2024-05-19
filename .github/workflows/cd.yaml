@@ -34,7 +34,7 @@ jobs:
           echo "version=${{ steps.set_project_version.outputs.VERSION }}" >> src/main/resources/application.properties
 
       - name: Display Structure of Project
-        run: tree ~
+        run: tree /home/runner/work/api-expense-track
 
       - name: Set Jar Filename
         run: echo "JAR_FILE=api-expense-track-${{ steps.set_project_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
@@ -48,7 +48,7 @@ jobs:
         run: mvn clean install -DskipTests=true
 
       - name: Display Structure of Project
-        run: tree ~
+        run: tree /home/runner/work/api-expense-track
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v1.1.0

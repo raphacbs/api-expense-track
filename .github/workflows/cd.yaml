@@ -58,24 +58,16 @@ jobs:
           repository: raphacbs/api-expense-track
           tags: ${{ env.NEW_VERSION }}, latest
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt-get update
+          sudo apt-get install gh
+
       - name: Update Project Version Secret
-        uses: actions/github-script@v3
-        with:
-          script: |
-            const newVersion = process.env.NEW_VERSION;
-            const githubToken = process.env.GITHUB_TOKEN;
-            const { Octokit } = require('@octokit/rest');
-            const octokit = new Octokit({ auth: githubToken });
-
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            await octokit.actions.createOrUpdateRepoSecret({
-              owner,
-              repo,
-              secret_name: 'PROJECT_VERSION',
-              encrypted_value: newVersion,
-            });
+        run: |
+          echo "$NEW_VERSION" | gh secret set PROJECT_VERSION -b -
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 

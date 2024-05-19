@@ -47,6 +47,9 @@ jobs:
           VERSION=${{ steps.set_project_version.outputs.VERSION }}
           mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
 
+      - name: Display UserController File Contents
+        run: cat src/main/java/com/coelho/brasileiro/expensetrack/controller/UserController.java
+
       - name: Update application.properties with version
         run: |
           echo "version=${{ env.NEW_VERSION }}" >> src/main/resources/application.properties

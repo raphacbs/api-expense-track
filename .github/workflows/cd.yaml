@@ -20,13 +20,21 @@ jobs:
 
       - name: Get Current Version
         id: get_version
-        run: echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
+        run: |
+          echo "Current Project Version: ${{ secrets.PROJECT_VERSION }}"
+          echo "::set-output name=VERSION::${{ secrets.PROJECT_VERSION }}"
 
       - name: Increment Version
         id: increment_version
         run: |
           CURRENT_VERSION="${{ steps.get_version.outputs.VERSION }}"
-          NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          if [[ ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version format. Resetting to 0.0.0"
+            CURRENT_VERSION="0.0.0"
+          fi
+          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+          VERSION_PARTS[2]=$((VERSION_PARTS[2] + 1))
+          NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${VERSION_PARTS[2]}"
           echo "New version: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 

@@ -1,6 +1,5 @@
 package com.coelho.brasileiro.expensetrack.config;
 
-import com.coelho.brasileiro.expensetrack.handle.CustomInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

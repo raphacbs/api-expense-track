@@ -2,7 +2,7 @@ package com.coelho.brasileiro.expensetrack.message.consume;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.Dto;
-import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
+import com.coelho.brasileiro.expensetrack.handler.AbstractHandler;
 import com.coelho.brasileiro.expensetrack.input.Input;
 import com.coelho.brasileiro.expensetrack.model.IEntity;
 import org.slf4j.Logger;

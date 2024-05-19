@@ -1,6 +1,6 @@
 package com.coelho.brasileiro.expensetrack.message.consume;
 
-import com.coelho.brasileiro.expensetrack.handle.AbstractHandler;
+import com.coelho.brasileiro.expensetrack.handler.AbstractHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +22,11 @@ public class ConsumerTopicBuilder<T> {
     private KafkaProperties kafkaProperties;
     private Class<T> type;
     private ConcurrentKafkaListenerContainerFactory<String, String> factory;
+    private SeekToCurrentErrorHandler errorHandler;
+
 
     public ConsumerTopicBuilder(Class<T> type) {
+
         this.type = type;
     }
 
@@ -41,6 +45,11 @@ public class ConsumerTopicBuilder<T> {
         return this;
     }
 
+    public ConsumerTopicBuilder<T> errorHandler(SeekToCurrentErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+        return this;
+    }
+
     public KafkaConsumerService<T> build() {
         ConcurrentKafkaListenerContainerFactory<String, T> factory = kafkaListenerContainerFactory();
         log.info("Iniciando inscrição para consumir mensagens do tópico: {}", topicName);
@@ -50,6 +59,10 @@ public class ConsumerTopicBuilder<T> {
     private ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setRecordFilterStrategy(record -> {
+            System.out.println("record = " + record.value());
+            return record.value() != null;
+        });
         return factory;
     }
 
@@ -65,5 +78,6 @@ public class ConsumerTopicBuilder<T> {
         String[] words = StringUtils.splitByCharacterTypeCamelCase(className);
         return String.join("_", words).toUpperCase();
     }
+
 
 }

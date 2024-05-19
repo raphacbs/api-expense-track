@@ -143,6 +143,7 @@ public interface Converter {
 
     List<Category> toEntityList(List<CategoryDto> categories);
 
+    @Mapping(target = "isDeleted", expression = "java(false)")
     Category toEntity(CategoryInput categoryInput);
 
     @Mapping(target = "isDeleted", expression = "java(false)")
@@ -218,6 +219,7 @@ public interface Converter {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "paymentMethod", source = "paymentMethod")
+    @Mapping(target = "category", source = "category")
     @Mapping(target = "isRecurring", expression = "java(Boolean.TRUE)")
     @Mapping(target = "createdAt", qualifiedBy = NullLocaDateToLocalDateTime.class)
     Transaction fromRecurringTransaction(RecurringTransaction recurringTransaction);

@@ -2,13 +2,12 @@ package com.coelho.brasileiro.expensetrack.flow;
 
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.handle.Handler;
+import com.coelho.brasileiro.expensetrack.handler.Handler;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.BiFunction;
 
 @Component
 public class FlowFactory {

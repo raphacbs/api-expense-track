@@ -1,14 +1,14 @@
 package com.coelho.brasileiro.expensetrack.flow.user;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.input.LoginInput;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertUserInputToUserEntityHandler;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.FindUserByEmailAndPasswordHandler;
 import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.FlowFactory;
-import com.coelho.brasileiro.expensetrack.handle.actions.ValidateInput;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.ConvertUserEntityToUserDtoHandler;
-import com.coelho.brasileiro.expensetrack.handle.actions.user.GenerateTokenHandler;
+import com.coelho.brasileiro.expensetrack.handler.actions.ValidateInput;
+import com.coelho.brasileiro.expensetrack.handler.actions.user.ConvertUserEntityToUserDtoHandler;
+import com.coelho.brasileiro.expensetrack.handler.actions.user.ConvertUserInputToUserEntityHandler;
+import com.coelho.brasileiro.expensetrack.handler.actions.user.FindUserByEmailAndPasswordHandler;
+import com.coelho.brasileiro.expensetrack.handler.actions.user.GenerateTokenHandler;
+import com.coelho.brasileiro.expensetrack.input.LoginInput;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

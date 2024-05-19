@@ -1,7 +1,7 @@
 package com.coelho.brasileiro.expensetrack.flow;
 
 import com.coelho.brasileiro.expensetrack.context.Context;
-import com.coelho.brasileiro.expensetrack.handle.Handler;
+import com.coelho.brasileiro.expensetrack.handler.Handler;
 
 public class Flow {
     private Handler action;

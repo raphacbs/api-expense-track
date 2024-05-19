@@ -21,7 +21,7 @@ jobs:
       - name: Set Project Version
         id: set_project_version
         run: |
-          NEW_VERSION="0.0.${{ GITHUB_RUN_NUMBER }}"
+          NEW_VERSION="0.0.$env:GITHUB_RUN_NUMBER"
           echo "::set-output name=VERSION::${{ env.NEW_VERSION }}"
 
       - name: Update Maven Project Version

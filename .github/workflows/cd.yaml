@@ -34,7 +34,7 @@ jobs:
 
       - name: Update application.properties with version
         run: |
-          echo "version=${{ env.NEW_VERSION }}" >> src/main/resources/application.properties
+          echo "version=${{ steps.set_project_version.outputs.VERSION }}" >> src/main/resources/application.properties
 
       - name: Set Jar Filename
         run: echo "JAR_FILE=api-expense-track-${{ steps.set_project_version.outputs.VERSION }}.jar" >> $GITHUB_ENV
@@ -53,21 +53,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: raphacbs/api-expense-track
-          tags: ${{ env.NEW_VERSION }}, latest
-
-      - name: Install GitHub CLI
-        run: |
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install gh
-
-      - name: Update Project Version Secret
-        run: |
-          echo "$NEW_VERSION" | gh secret set PROJECT_VERSION -b -
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          tags: ${{ steps.set_project_version.outputs.VERSION }}, latest
 
   deploy:
     name: Deploy

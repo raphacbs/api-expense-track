@@ -1,5 +1,6 @@
 package com.coelho.brasileiro.expensetrack.controller;
 
+import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.service.TransactionService;
@@ -15,6 +16,8 @@ import java.util.UUID;
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("api/v1/transactions")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Transações",
+        description = "Endpoints relacionados à gestão de transações")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -29,6 +32,10 @@ public class TransactionController {
      * @param input Dados da transação a serem criados.
      * @return ResponseEntity contendo a transação criada e o status HTTP 201 (CREATED).
      */
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201",
+            description = "Transação criada com sucesso",
+            content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionDto.class))})
     @PostMapping
     public ResponseEntity<?> createTransaction(@RequestBody TransactionInput input) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -44,6 +51,7 @@ public class TransactionController {
      * @param budgetId   ID do orçamento para filtrar (opcional).
      * @return ResponseEntity contendo a lista de transações filtradas e o status HTTP 200 (OK).
      */
+
     @GetMapping("/filter")
     public ResponseEntity<List<Transaction>> getTransactionsByPeriodAndFilters(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

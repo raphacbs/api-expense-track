@@ -62,6 +62,9 @@ pipeline {
                     // Adicionando a imagem Docker ao comando docker run
                     dockerRunCommand += " ${DOCKER_IMAGE}"
 
+                    // Atualizando a imagem Docker
+                    sh "docker pull ${DOCKER_IMAGE}"
+
                     // Executando o comando docker run
                     sh dockerRunCommand
                 }

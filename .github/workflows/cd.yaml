@@ -44,6 +44,9 @@ jobs:
         env:
           JAR_FILE: ${{ env.JAR_FILE }}
 
+      - name: Display pom.xml
+        run: cat pom.xml
+
       - name: Build with Maven
         run: mvn clean install -DskipTests=true
 

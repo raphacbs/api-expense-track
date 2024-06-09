@@ -53,16 +53,17 @@ public class TransactionController {
      */
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Transaction>> getTransactionsByPeriodAndFilters(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+    public ResponseEntity<List<TransactionDto>> getTransactionsByPeriodAndFilters(
+            @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) String description,
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) UUID budgetId) {
 
-        List<Transaction> filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(
-                startDate, endDate, categoryId, budgetId);
+        List<TransactionDto> filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(
+                startDate, endDate, categoryId, description, budgetId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(filteredTransactions);
     }
 
     /**

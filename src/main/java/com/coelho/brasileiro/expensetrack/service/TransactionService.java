@@ -2,14 +2,14 @@ package com.coelho.brasileiro.expensetrack.service;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
-import com.coelho.brasileiro.expensetrack.flow.AFlowBuilder;
 import com.coelho.brasileiro.expensetrack.flow.transaction.RegisterTransactionBuilder;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
+import com.coelho.brasileiro.expensetrack.mapper.Converter;
 import com.coelho.brasileiro.expensetrack.model.FrequencyEnum;
 import com.coelho.brasileiro.expensetrack.model.StatusTransactionEnum;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
+import com.coelho.brasileiro.expensetrack.repository.TransactionRepository;
 import com.coelho.brasileiro.expensetrack.util.FrequencyUtils;
-import jakarta.inject.Named;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,6 +29,8 @@ import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRAN
 public class TransactionService {
 
     private final RegisterTransactionBuilder registerTransactionBuilder;
+    private final TransactionRepository transactionRepository;
+    private final Converter converter = Converter.INSTANCE;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public TransactionDto saveTransaction(TransactionInput input) {
@@ -96,11 +98,13 @@ public class TransactionService {
         }
     }
 
-    public List<Transaction> getTransactionsByPeriodAndFilters(LocalDate startDate,
+    public List<TransactionDto> getTransactionsByPeriodAndFilters(LocalDate startDate,
                                                                LocalDate endDate,
                                                                UUID categoryId,
+                                                                  String description,
                                                                UUID budgetId) {
-        return null;
+
+        return converter.toDto(this.transactionRepository.findByPeriodAndDescription(startDate, endDate, description));
     }
 
     public boolean payTransaction(UUID transactionId) {
@@ -110,4 +114,6 @@ public class TransactionService {
     public Transaction editTransaction(UUID transactionId, TransactionInput input) {
         return null;
     }
+
+
 }

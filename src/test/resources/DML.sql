@@ -1,0 +1,4 @@
+INSERT INTO public.recurring_transaction
+(id, created_at, description, due_date, end_date, frequency, group_id, is_active, is_deleted, is_fixed_value, last_processing, start_date, "type", value, budget_id, category_id, money_box_id, payment_method, user_id, merchant, tags, last_due_date)
+VALUES('30c56e66-ce59-4d33-b0e4-4a29c4a0c351'::uuid, '2024-06-09', 'Assinatura mensal Spotify Premium Duo', '2024-05-30', '2024-12-01', 'MONTHLY', '884b0c6b-74e1-4a9e-8130-91369de59389'::uuid, true, false, false, '2024-06-09 12:34:00.845', '2024-04-01', 'E', 27.9, NULL, '6aa3ebc7-6c8c-4746-9753-866357e72eab'::uuid, NULL, 'ca289287-fd6b-4202-9b8b-87e705633565'::uuid, 'cd3fe8fd-0665-426e-89ad-7e824a5b32a3'::uuid, 'Spotify', 'Streaming', '2025-07-30')
+ON CONFLICT (id) DO NOTHING;

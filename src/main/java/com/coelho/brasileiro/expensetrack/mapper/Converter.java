@@ -33,9 +33,15 @@ public interface Converter {
         return date != null ? date : null;
 
     }
+
     @LocalDateTimeToString
     default String localDateTimeToString(LocalDateTime date) {
         return date != null ? date.format(DateTimeFormatter.ISO_DATE_TIME): null;
+    }
+
+    @LocalDateToString
+    default String localDateToString(LocalDate date) {
+        return date != null ? date.format(DateTimeFormatter.ISO_DATE) : null;
     }
 
     @NullToCategory
@@ -63,6 +69,21 @@ public interface Converter {
     @interface LocalDateTimeToString {
 
     }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user",  expression = "java(user)")
+    @Mapping(target = "createdAt",  expression = "java(LocalDate.now())")
+    @Mapping(target = "isActive",  expression = "java(Boolean.TRUE)")
+    @Mapping(target = "isFixedValue",  expression = "java(Boolean.FALSE)")
+    @Mapping(target = "isDeleted",  expression = "java(Boolean.FALSE)")
+    @Mapping(target = "paymentMethod", expression = "java(input.getPaymentMethodId() != null ? PaymentMethod.builder().id(UUID.fromString(input.getPaymentMethodId())).build() : null)")
+    @Mapping(target = "moneyBox", expression = "java(input.getMoneyBoxId() != null ? MoneyBox.builder().id(UUID.fromString(input.getMoneyBoxId())).build() : null)")
+    @Mapping(target = "budget", expression = "java(input.getBudgetId() != null ? Budget.builder().id(UUID.fromString(input.getBudgetId())).build() : null)")
+    @Mapping(target = "category", expression = "java(input.getCategoryId() != null ? Category.builder().id(UUID.fromString(input.getCategoryId())).build() : null)")
+    @Mapping(target = "merchant", source = "merchant")
+    @Mapping(target = "tags", source = "tags")
+    @Mapping(target = "lastDueDate", source = "dueDate")
+    RecurringTransaction fromTransactionInput(TransactionInput input, @Context User user);
 
     @Qualifier
     @Target(ElementType.METHOD)
@@ -206,16 +227,18 @@ public interface Converter {
     @Mapping(target = "endDate", qualifiedBy = NullLocaDateToLocalDateTime.class)
     Budget partialUpdate(BudgetInput budgetInput, @MappingTarget Budget budget);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user",  expression = "java(user)")
-    @Mapping(target = "createdAt",  expression = "java(LocalDate.now())")
-    @Mapping(target = "isActive",  expression = "java(Boolean.TRUE)")
-    @Mapping(target = "isFixedValue",  expression = "java(Boolean.FALSE)")
-    @Mapping(target = "isDeleted",  expression = "java(Boolean.FALSE)")
-    @Mapping(target = "paymentMethod", expression = "java(input.getPaymentMethodId() != null ? PaymentMethod.builder().id(UUID.fromString(input.getPaymentMethodId())).build() : null)")
-    @Mapping(target = "moneyBox", expression = "java(input.getMoneyBoxId() != null ? MoneyBox.builder().id(UUID.fromString(input.getMoneyBoxId())).build() : null)")
-    @Mapping(target = "budget", expression = "java(input.getBudgetId() != null ? Budget.builder().id(UUID.fromString(input.getBudgetId())).build() : null)")
-    RecurringTransaction fromTransactionInput(TransactionInput input, @Context User user);
+    @Mapping(target = "paymentMethod", expression = "java(recurringTransaction.getPaymentMethod() == null ?  null : recurringTransaction.getPaymentMethod().getId().toString())")
+    @Mapping(target = "categoryId", expression = "java(recurringTransaction.getCategory() == null ?  null : recurringTransaction.getCategory().getId().toString())")
+    @Mapping(target = "moneyBoxId", expression = "java(recurringTransaction.getMoneyBox() == null ?  null : recurringTransaction.getMoneyBox().getId().toString())")
+    @Mapping(target = "budgetId", expression = "java(recurringTransaction.getBudget() == null ?  null : recurringTransaction.getBudget().getId().toString())")
+    @Mapping(target = "userId", expression = "java(recurringTransaction.getUser() == null ?  null : recurringTransaction.getUser().getId().toString())")
+    @Mapping(target = "createdAt", qualifiedBy = LocalDateToString.class)
+    @Mapping(target = "startDate", qualifiedBy = LocalDateToString.class)
+    @Mapping(target = "dueDate", qualifiedBy = LocalDateToString.class)
+    @Mapping(target = "lastProcessing", qualifiedBy = LocalDateTimeToString.class)
+    @Mapping(target = "endDate", qualifiedBy = LocalDateToString.class)
+    @Mapping(target = "lastDueDate", qualifiedBy = LocalDateToString.class)
+    RecurringTransactionInput toInput(RecurringTransaction recurringTransaction);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "paymentMethod", source = "paymentMethod")
@@ -224,6 +247,12 @@ public interface Converter {
     @Mapping(target = "createdAt", qualifiedBy = NullLocaDateToLocalDateTime.class)
     Transaction fromRecurringTransaction(RecurringTransaction recurringTransaction);
 
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    @interface LocalDateToString {
+
+    }
 
     default UUID map(String value) {
         if (value == null) {

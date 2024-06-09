@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.coelho.brasileiro.expensetrack.util.Constants.RecurringTransaction.RECURRING_TRANSACTION;
+import static java.time.Month.FEBRUARY;
 
 @Component
 @AllArgsConstructor
@@ -40,25 +41,36 @@ public class CreateTransactionFromRecurringTransactionHandler extends AbstractHa
             log.info("Transação recorrente apta para ser processada: {}", recurringTransaction.getId());
 
             List<Transaction> transactions = new ArrayList<>();
-            for (int i = 1; i <= 12; i++) {
+            int monthsTotal = recurringTransaction.getDueDate().isEqual(recurringTransaction.getLastDueDate()) ? 12 : 2;
+            log.info("Serão criadas mais {} transações originadas da transação recorrente '{}' ", monthsTotal, recurringTransaction.getId());
+            for (int i = 1; i <= monthsTotal; i++) {
                 Transaction transaction = mapper.fromRecurringTransaction(recurringTransaction);
                 transaction.setTotalValue(transaction.getValue());
                 transaction.setStatus(StatusTransactionEnum.SCHEDULED);
                 transaction.setInstallments(1);
                 transaction.setCurrentInstallments(1);
-                transaction.setDueDate(transaction.getDueDate().plusMonths(i));
                 transaction.setCreatedAt(LocalDateTime.now());
+                transaction.setDueDate(recurringTransaction.getLastDueDate().plusMonths(1));
 
-                if (this.transactionRepository.findByGroupIdAndDueDate(transaction.getGroupId(), transaction.getDueDate()).isEmpty()) {
+//                if (this.transactionRepository.findByGroupIdAndDueDate(transaction.getGroupId(), transaction.getDueDate()).isEmpty()) {
                     transactions.add(transaction);
+//                }
+                if (transaction.getDueDate().getMonth() == FEBRUARY) {
+                    recurringTransaction.setLastDueDate(transaction.getDueDate());
+                } else {
+                    int dayOfMonth = recurringTransaction.getDueDate().getDayOfMonth();
+                    transaction.setDueDate(transaction.getDueDate().withDayOfMonth(dayOfMonth));
+                    recurringTransaction.setLastDueDate(transaction.getDueDate()
+                            .withDayOfMonth(dayOfMonth));
+
                 }
             }
 
-            if (!transactions.isEmpty()) {
+//            if (!transactions.isEmpty()) {
                 this.transactionRepository.saveAll(transactions);
                 recurringTransaction.setLastProcessing(LocalDateTime.now());
                 this.recurringTransactionRepository.save(recurringTransaction);
-            }
+//            }
         }
     }
 

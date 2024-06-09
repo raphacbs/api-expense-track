@@ -25,15 +25,17 @@ public class RecurringTransactionTransformer
         User user = User.builder()
                 .id(UUID.fromString(getPropertyValue("user_id").asText()))
                 .build();
+
         Category category = null;
+        MoneyBox moneyBox = null;
+        Budget budget = null;
 
         if (isNotNullAndNotEqual(getPropertyValue("category_id").asText(), "null"))
-            Category.builder()
+            category = Category.builder()
                     .id(UUID.fromString(getPropertyValue("category_id").asText()))
                     .build();
 
-        MoneyBox moneyBox = null;
-        Budget budget = null;
+
         if (isNotNullAndNotEqual(getPropertyValue("budget_id").asText(), "null")) {
             budget = Budget.builder().id(UUID.fromString(getPropertyValue("budget_id").asText()))
                     .build();

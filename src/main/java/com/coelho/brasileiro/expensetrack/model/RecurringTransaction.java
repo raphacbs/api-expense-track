@@ -64,7 +64,7 @@ public class RecurringTransaction implements EntityDeletable{
     @JsonProperty("is_deleted")
     private Boolean isDeleted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonProperty("category_id")
     @JoinColumn(name = "category_id")
     private Category category;
@@ -97,5 +97,17 @@ public class RecurringTransaction implements EntityDeletable{
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("due_date")
     private LocalDate dueDate;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("last_due_date")
+    private LocalDate lastDueDate;
+
+    @Column
+    private String merchant;
+
+    @Column
+    private String tags;
+
 
 }

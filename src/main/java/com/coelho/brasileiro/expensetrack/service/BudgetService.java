@@ -4,12 +4,10 @@ import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.BudgetDto;
 import com.coelho.brasileiro.expensetrack.flow.budget.*;
 import com.coelho.brasileiro.expensetrack.input.BudgetInput;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
@@ -44,22 +42,22 @@ public class BudgetService {
         return context.getBudgetDto();
     }
 
-    @PostConstruct
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void onApplicationStart() {
-        // Este método será executado quando o aplicativo Spring Boot iniciar.
-        // Você pode chamar a lógica de criação de registros aqui.
-        createBudgetRecordsFromRecurringBudget();
-    }
+//    @PostConstruct
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void onApplicationStart() {
+//        // Este método será executado quando o aplicativo Spring Boot iniciar.
+//        // Você pode chamar a lógica de criação de registros aqui.
+//        createBudgetRecordsFromRecurringBudget();
+//    }
 
-    @Scheduled(cron = "0 0 20 * * ?") // Agendado para rodar uma vez por dia às 20hrs
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void createBudgetRecordsFromRecurringBudget() {
-        System.out.println("Creating budget records from recurring budgets");
-        DefaultContext context = DefaultContext.builder().build();
-        context.setEntityNameCurrent("BUDGET");
-        schedulerCreateRecurringBudgetBuilder.create(context).build().run();
-    }
+//    @Scheduled(cron = "0 0 20 * * ?") // Agendado para rodar uma vez por dia às 20hrs
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public void createBudgetRecordsFromRecurringBudget() {
+//        System.out.println("Creating budget records from recurring budgets");
+//        DefaultContext context = DefaultContext.builder().build();
+//        context.setEntityNameCurrent("BUDGET");
+//        schedulerCreateRecurringBudgetBuilder.create(context).build().run();
+//    }
 
     public Object getBudgets(Map<String, String> params) {
         DefaultContext  context = DefaultContext.builder().build();

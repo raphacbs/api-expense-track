@@ -1,5 +1,7 @@
 package com.coelho.brasileiro.expensetrack.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,5 +35,10 @@ public class Category implements EntityDeletable{
 
     @Column(nullable = false)
     private Boolean isDeleted;
+
+    @JsonCreator
+    public Category(@JsonProperty("id") String id) {
+        this.id = UUID.fromString(id);
+    }
 
 }

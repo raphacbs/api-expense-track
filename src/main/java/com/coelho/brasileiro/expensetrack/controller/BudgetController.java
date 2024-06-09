@@ -3,7 +3,6 @@ package com.coelho.brasileiro.expensetrack.controller;
 
 import com.coelho.brasileiro.expensetrack.constants.Params;
 import com.coelho.brasileiro.expensetrack.input.BudgetInput;
-import com.coelho.brasileiro.expensetrack.input.CategoryInput;
 import com.coelho.brasileiro.expensetrack.service.BudgetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)

@@ -2,6 +2,7 @@ package com.coelho.brasileiro.expensetrack.service;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
+import com.coelho.brasileiro.expensetrack.filter.TransactionFilterRequest;
 import com.coelho.brasileiro.expensetrack.flow.transaction.RegisterTransactionBuilder;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
@@ -11,13 +12,13 @@ import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.repository.TransactionRepository;
 import com.coelho.brasileiro.expensetrack.util.FrequencyUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import static com.coelho.brasileiro.expensetrack.util.Checks.isNull;
@@ -98,13 +99,8 @@ public class TransactionService {
         }
     }
 
-    public List<TransactionDto> getTransactionsByPeriodAndFilters(LocalDate startDate,
-                                                               LocalDate endDate,
-                                                               UUID categoryId,
-                                                                  String description,
-                                                               UUID budgetId) {
-
-        return converter.toDto(this.transactionRepository.findByPeriodAndDescription(startDate, endDate, description));
+    public Page<TransactionDto> getTransactionsByPeriodAndFilters(TransactionFilterRequest filterRequest) {
+        return converter.toDto(this.transactionRepository.findByPeriodAndDescription(filterRequest, filterRequest.getPageable()));
     }
 
     public boolean payTransaction(UUID transactionId) {

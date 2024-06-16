@@ -2,9 +2,7 @@ package com.coelho.brasileiro.expensetrack.controller;
 
 
 import com.coelho.brasileiro.expensetrack.constants.Params;
-import com.coelho.brasileiro.expensetrack.input.CategoryInput;
 import com.coelho.brasileiro.expensetrack.input.PaymentMethodInput;
-import com.coelho.brasileiro.expensetrack.service.CategoryService;
 import com.coelho.brasileiro.expensetrack.service.PaymentMethodService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

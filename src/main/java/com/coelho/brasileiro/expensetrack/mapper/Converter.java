@@ -283,6 +283,10 @@ public interface Converter {
         return mapperConverter.apply(entity);
     }
 
+    default Page<TransactionDto> toDto(Page<Transaction> transactions) {
+        return transactions.map(this::toDto);
+    }
+
     ResponsePage<CategoryDto> toDtoPage(ResponsePage<Category> categories);
 
 

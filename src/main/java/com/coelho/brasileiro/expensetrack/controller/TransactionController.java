@@ -1,16 +1,16 @@
 package com.coelho.brasileiro.expensetrack.controller;
 
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
+import com.coelho.brasileiro.expensetrack.filter.TransactionFilterRequest;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.service.TransactionService;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -45,24 +45,15 @@ public class TransactionController {
     /**
      * Obtém transações filtradas por período (startDate e endDate) e opcionalmente por categoryId e budgetId.
      *
-     * @param startDate Data de início do período.
-     * @param endDate   Data de fim do período.
-     * @param categoryId ID da categoria para filtrar (opcional).
-     * @param budgetId   ID do orçamento para filtrar (opcional).
+     * @param allRequestParams Map contendo os parâmetros de filtro.
+     * Parâmetros suportados: startDate, endDate, description, categoryId, budgetId, pageNo, pageSize, sortBy, sortDir.
      * @return ResponseEntity contendo a lista de transações filtradas e o status HTTP 200 (OK).
      */
 
     @GetMapping("/filter")
-    public ResponseEntity<List<TransactionDto>> getTransactionsByPeriodAndFilters(
-            @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) UUID categoryId,
-            @RequestParam(required = false) UUID budgetId) {
-
-        List<TransactionDto> filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(
-                startDate, endDate, categoryId, description, budgetId);
-
+    public ResponseEntity<Page<TransactionDto>> getTransactionsByPeriodAndFilters(@RequestParam Map<String, String> allRequestParams) {
+        TransactionFilterRequest filterRequest = new TransactionFilterRequest(allRequestParams);
+        Page<TransactionDto> filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(filterRequest);
         return ResponseEntity.ok().body(filteredTransactions);
     }
 

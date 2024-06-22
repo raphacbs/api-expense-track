@@ -2,17 +2,20 @@ package com.coelho.brasileiro.expensetrack.service;
 
 import com.coelho.brasileiro.expensetrack.context.DefaultContext;
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
-import com.coelho.brasileiro.expensetrack.filter.TransactionFilterRequest;
+import com.coelho.brasileiro.expensetrack.dto.TransactionResponse;
+import com.coelho.brasileiro.expensetrack.exception.BusinessException;
+import com.coelho.brasileiro.expensetrack.filter.TransactionRequest;
 import com.coelho.brasileiro.expensetrack.flow.transaction.RegisterTransactionBuilder;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.mapper.Converter;
 import com.coelho.brasileiro.expensetrack.model.FrequencyEnum;
 import com.coelho.brasileiro.expensetrack.model.StatusTransactionEnum;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
+import com.coelho.brasileiro.expensetrack.repository.TransactionCustomRepository;
 import com.coelho.brasileiro.expensetrack.repository.TransactionRepository;
 import com.coelho.brasileiro.expensetrack.util.FrequencyUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.coelho.brasileiro.expensetrack.util.BusinessCode.TransactionCodes.TRANSACTION_ALREADY_PAID;
+import static com.coelho.brasileiro.expensetrack.util.BusinessCode.TransactionCodes.TRANSACTION_NOT_FOUND;
 import static com.coelho.brasileiro.expensetrack.util.Checks.isNull;
 import static com.coelho.brasileiro.expensetrack.util.Constants.Transaction.TRANSACTION;
 
@@ -32,11 +37,13 @@ public class TransactionService {
     private final RegisterTransactionBuilder registerTransactionBuilder;
     private final TransactionRepository transactionRepository;
     private final Converter converter = Converter.INSTANCE;
+    private final TransactionCustomRepository transactionCustomRepository;
+    private final UserService userService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public TransactionDto saveTransaction(TransactionInput input) {
+    public TransactionDto saveTransaction(TransactionRequest request) {
         DefaultContext context = DefaultContext.builder().build();
-        context.setTransactionInput(input);
+        context.setTransactionInput(request.getBody());
         context.setEntityNameCurrent(TRANSACTION);
         this.registerTransactionBuilder.create(context).build().run();
         return context.getTransactionDto();
@@ -58,7 +65,7 @@ public class TransactionService {
 
     }
 
-    public Transaction createNextInstallmentTransaction(Transaction transaction) {
+    public Transaction createNextInstallmentTransaction(@NotNull Transaction transaction) {
         LocalDateTime nextDate = FrequencyUtils.calculateNextDate(transaction.getDueDate().atStartOfDay(), FrequencyEnum.MONTHLY);
         return Transaction.builder()
                 .type(transaction.getType())
@@ -83,7 +90,7 @@ public class TransactionService {
                 .build();
     }
 
-    public void setTransactionStatusByDate(Transaction transaction) {
+    public void setTransactionStatusByDate(@NotNull Transaction transaction) {
 
         LocalDate paymentDate = transaction.getPaymentDate();
         LocalDate dueDate = transaction.getDueDate();
@@ -99,12 +106,25 @@ public class TransactionService {
         }
     }
 
-    public Page<TransactionDto> getTransactionsByPeriodAndFilters(TransactionFilterRequest filterRequest) {
-        return converter.toDto(this.transactionRepository.findByPeriodAndDescription(filterRequest, filterRequest.getPageable()));
+    public TransactionResponse getTransactionsByPeriodAndFilters(TransactionRequest filterRequest) {
+        return converter.toDto(this.transactionCustomRepository.findTransactionsByDateRangeAndStatus(filterRequest,
+                filterRequest.getPageable(),
+                userService.getUserLogged().getId()
+        ));
     }
 
-    public boolean payTransaction(UUID transactionId) {
-        return false;
+    public void payTransaction(@NotNull TransactionRequest request) {
+
+        Transaction transaction = this.transactionRepository.findById(request.getTransactionId())
+                .orElseThrow(() -> new BusinessException(TRANSACTION_NOT_FOUND));
+
+        if (transaction.getStatus().equals(StatusTransactionEnum.PAID)) {
+            throw new BusinessException(TRANSACTION_ALREADY_PAID);
+        }
+
+        transaction.setPaymentDate(LocalDate.now());
+        transaction.setStatus(StatusTransactionEnum.PAID);
+        this.transactionRepository.save(transaction);
     }
 
     public Transaction editTransaction(UUID transactionId, TransactionInput input) {

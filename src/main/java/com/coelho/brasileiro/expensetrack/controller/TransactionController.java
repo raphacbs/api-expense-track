@@ -1,16 +1,16 @@
 package com.coelho.brasileiro.expensetrack.controller;
 
 import com.coelho.brasileiro.expensetrack.dto.TransactionDto;
-import com.coelho.brasileiro.expensetrack.filter.TransactionFilterRequest;
+import com.coelho.brasileiro.expensetrack.dto.TransactionResponse;
+import com.coelho.brasileiro.expensetrack.filter.TransactionRequest;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import com.coelho.brasileiro.expensetrack.service.TransactionService;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +29,7 @@ public class TransactionController {
     /**
      * Cria uma nova transação.
      *
-     * @param input Dados da transação a serem criados.
+     * @param input Dados da transação a ser criada.
      * @return ResponseEntity contendo a transação criada e o status HTTP 201 (CREATED).
      */
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201",
@@ -37,23 +37,24 @@ public class TransactionController {
             content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
                     schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionDto.class))})
     @PostMapping
-    public ResponseEntity<?> createTransaction(@RequestBody TransactionInput input) {
+    public ResponseEntity<?> createTransaction(HttpServletRequest request) {
+        TransactionRequest transactionRequest = new TransactionRequest(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.transactionService.saveTransaction(input));
+                .body(this.transactionService.saveTransaction(transactionRequest));
     }
 
     /**
      * Obtém transações filtradas por período (startDate e endDate) e opcionalmente por categoryId e budgetId.
      *
      * @param allRequestParams Map contendo os parâmetros de filtro.
-     * Parâmetros suportados: startDate, endDate, description, categoryId, budgetId, pageNo, pageSize, sortBy, sortDir.
+     *                         Parâmetros suportados: startDate, endDate, description, categoryId, budgetId, pageNo, pageSize, sortBy, sortDir.
      * @return ResponseEntity contendo a lista de transações filtradas e o status HTTP 200 (OK).
      */
 
     @GetMapping("/filter")
-    public ResponseEntity<Page<TransactionDto>> getTransactionsByPeriodAndFilters(@RequestParam Map<String, String> allRequestParams) {
-        TransactionFilterRequest filterRequest = new TransactionFilterRequest(allRequestParams);
-        Page<TransactionDto> filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(filterRequest);
+    public ResponseEntity<TransactionResponse> getTransactionsByPeriodAndFilters(HttpServletRequest request) {
+        TransactionRequest filterRequest = new TransactionRequest(request);
+        TransactionResponse filteredTransactions = transactionService.getTransactionsByPeriodAndFilters(filterRequest);
         return ResponseEntity.ok().body(filteredTransactions);
     }
 
@@ -63,16 +64,11 @@ public class TransactionController {
      * @param transactionId ID da transação a ser paga.
      * @return ResponseEntity indicando o sucesso do pagamento e o status HTTP apropriado.
      */
-    @PostMapping("/{transactionId}/pay")
-    public ResponseEntity<String> payTransaction(@PathVariable UUID transactionId) {
-        // Lógica de pagamento da transação
-        boolean paymentSuccess = transactionService.payTransaction(transactionId);
-
-        if (paymentSuccess) {
-            return ResponseEntity.ok("Pagamento realizado com sucesso.");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Falha ao realizar o pagamento.");
-        }
+    @PutMapping("/{transactionId}/pay")
+    public ResponseEntity<String> payTransaction(@PathVariable UUID transactionId, HttpServletRequest request) {
+        TransactionRequest transactionRequest = new TransactionRequest(request, transactionId);
+        transactionService.payTransaction(transactionRequest);
+        return ResponseEntity.ok("Pagamento realizado com sucesso.");
     }
 
     /**

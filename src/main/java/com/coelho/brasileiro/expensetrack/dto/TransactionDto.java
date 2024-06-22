@@ -1,7 +1,6 @@
 package com.coelho.brasileiro.expensetrack.dto;
 
 
-import com.coelho.brasileiro.expensetrack.model.StatusEnum;
 import com.coelho.brasileiro.expensetrack.model.StatusTransactionEnum;
 import com.coelho.brasileiro.expensetrack.model.TransactionTypeEnum;
 import lombok.AllArgsConstructor;

@@ -4,7 +4,6 @@ import com.coelho.brasileiro.expensetrack.exception.BusinessException;
 import com.coelho.brasileiro.expensetrack.exception.MessageExceptionHandler;
 import com.coelho.brasileiro.expensetrack.exception.ResourceValidationException;
 import com.coelho.brasileiro.expensetrack.exception.TokenException;
-import com.coelho.brasileiro.expensetrack.util.BusinessCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -46,6 +45,7 @@ public class ControllerAdvice {
     @ResponseBody
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<MessageExceptionHandler> error(RuntimeException businessException) {
+        logger.error("Error", businessException);
         MessageExceptionHandler error = new MessageExceptionHandler(500,
                 "Internal Server Error");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

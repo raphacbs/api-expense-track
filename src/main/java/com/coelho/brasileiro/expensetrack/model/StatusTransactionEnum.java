@@ -13,4 +13,9 @@ public enum StatusTransactionEnum {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+
 }

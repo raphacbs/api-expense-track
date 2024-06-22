@@ -1,6 +1,8 @@
 package com.coelho.brasileiro.expensetrack.filter;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -14,7 +16,8 @@ public enum TypeConverter {
     BOOLEAN(boolean.class, Boolean::parseBoolean),
     BOOLEAN_OBJ(Boolean.class, Boolean::parseBoolean),
     LOCAL_DATE(LocalDate.class, LocalDate::parse),
-    UUID_TYPE(UUID.class, UUID::fromString);
+    UUID_TYPE(UUID.class, UUID::fromString),
+    LIST_OF_STRINGS(List.class, value -> Arrays.asList(value.split(",")));
 
     private final Class<?> type;
     private final Function<String, ?> converter;

@@ -1,6 +1,6 @@
 package com.coelho.brasileiro.expensetrack.repository;
 
-import com.coelho.brasileiro.expensetrack.filter.TransactionFilterRequest;
+import com.coelho.brasileiro.expensetrack.filter.TransactionRequest;
 import com.coelho.brasileiro.expensetrack.model.Transaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +13,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
+
     Optional<Transaction> findByGroupIdAndDueDate(UUID groupId, LocalDate dueDate);
 
-    @Query("SELECT t FROM Transaction t WHERE t.isDeleted = false AND t.dueDate BETWEEN :#{#filterRequest.startDate} AND :#{#filterRequest.endDate} AND (:#{#filterRequest.description} IS NULL OR lower(t.description) LIKE lower(concat('%', :#{#filterRequest.description},'%')))")
-    Page<Transaction> findByPeriodAndDescription(
-            @Param("filterRequest") TransactionFilterRequest filterRequest,
+    @Query("SELECT t FROM Transaction t WHERE t.isDeleted = false AND t.dueDate BETWEEN :#{#filterRequest.startDate} AND :#{#filterRequest.endDate} " +
+            "AND (:#{#filterRequest.description} IS NULL OR lower(t.description) LIKE lower(concat('%', :#{#filterRequest.description},'%'))) " +
+            "AND (:#{#filterRequest.getStatusEnums()} IS NULL OR t.status IN :#{#filterRequest.getStatusEnums()})")
+    Page<Transaction> findByPeriodAndDescriptionAndStatus(
+            @Param("filterRequest") TransactionRequest filterRequest,
             Pageable pageable
     );
 }

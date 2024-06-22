@@ -3,6 +3,7 @@ package com.coelho.brasileiro.expensetrack.mapper;
 import com.coelho.brasileiro.expensetrack.dto.*;
 import com.coelho.brasileiro.expensetrack.input.*;
 import com.coelho.brasileiro.expensetrack.model.*;
+import com.coelho.brasileiro.expensetrack.repository.TransactionPageImpl;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -125,7 +126,7 @@ public interface Converter {
 
     @Named("toUserDto")
     @Mapping(target = "createdAt", qualifiedBy = LocalDateTimeToString.class)
-    @Mapping(target = "initials", expression = "java(user.getFirstName().substring(0,1) + user.getLastName().substring(0,1))")
+    @Mapping(target = "initials", expression = "java(user.getFirstName() != null && user.getLastName() != null ? user.getFirstName().substring(0, 1) + user.getLastName().substring(0, 1) : null)")
     UserDto toUserDto(com.coelho.brasileiro.expensetrack.model.User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -283,11 +284,17 @@ public interface Converter {
         return mapperConverter.apply(entity);
     }
 
-    default Page<TransactionDto> toDto(Page<Transaction> transactions) {
-        return transactions.map(this::toDto);
+    default TransactionResponse toDto(TransactionPageImpl<Transaction> transactions) {
+        TransactionResponse transactionResponse = toTransactionResponse(toResponsePage(transactions.map(this::toDto)));
+        transactionResponse.setTotalBalance(transactions.getBalance().doubleValue());
+        return transactionResponse;
+
     }
 
     ResponsePage<CategoryDto> toDtoPage(ResponsePage<Category> categories);
+
+
+    TransactionResponse toTransactionResponse(ResponsePage<TransactionDto> page);
 
 
     @Named("mapCategoryList")
@@ -300,11 +307,10 @@ public interface Converter {
         ResponsePage<T> responsePage = new ResponsePage<>();
         responsePage.setItems(page.toList());
         responsePage.setPageNo(page.getNumber() + 1);
-        responsePage.setLast(page.isLast());
+        responsePage.setLastPage(page.isLast());
         responsePage.setPageSize(page.getSize());
         responsePage.setTotalPages(page.getTotalPages());
         responsePage.setTotalElements(page.getTotalElements());
-
         return responsePage;
     }
 
@@ -326,7 +332,7 @@ public interface Converter {
 //        }
 
         responsePage.setPageNo(page.getNumber() + 1);
-        responsePage.setLast(page.isLast());
+        responsePage.setLastPage(page.isLast());
         responsePage.setPageSize(page.getSize());
         responsePage.setTotalPages(page.getTotalPages());
         responsePage.setTotalElements(page.getTotalElements());

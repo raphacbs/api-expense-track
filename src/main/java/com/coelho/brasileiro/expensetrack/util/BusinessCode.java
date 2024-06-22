@@ -47,5 +47,7 @@ public interface BusinessCode {
         Integer TRANSACTION_ALREADY_EXISTS = TRANSACTION + 10;
         Integer TRANSACTION_NOT_FOUND = TRANSACTION + 20;
         Integer TRANSACTION_PARAMS = TRANSACTION + 30;
+        Integer TRANSACTION_ALREADY_PAID = TRANSACTION + 40;
+
     }
 }

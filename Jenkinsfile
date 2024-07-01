@@ -22,9 +22,8 @@ pipeline {
         TOPIC_TRANSACAO_MENSAL_A_CRIAR = '"TRANSACAO_MENSAL_A_CRIAR"'
         SERVER_SSL_KEY_STORE_PASSWORD='"qwe01poi"'
         SERVER_SSL_KEY_PASSWORD='"qwe01poi"'
-        SERVER_SSL_KEY_STORE_TYPE='"PKCS12"'
-        SERVER_SSL_KEY_STORE='"/etc/letsencrypt/live/diycompany.online/fullchain.pem"'
-        SERVER_SSL_KEY_ALIAS='"diycompany"'
+        SERVER_SSL_KEY_STORE='"classpath:diycompany.keystore.p12"'
+
 
     }
 

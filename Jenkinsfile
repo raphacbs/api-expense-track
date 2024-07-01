@@ -20,6 +20,9 @@ pipeline {
         SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET = '"earliest"'
         TOPIC_TRANSACAO_MENSAL_A_SALVAR = '"TRANSACAO_MENSAL_A_SALVAR"'
         TOPIC_TRANSACAO_MENSAL_A_CRIAR = '"TRANSACAO_MENSAL_A_CRIAR"'
+        SERVER_SSL_KEY_STORE='"classpath:diycompany.keystore.p12"'
+        SERVER_SSL_KEY_STORE_PASSWORD='"qwe01poi"'
+        SERVER_SSL_KEY_PASSWORD='"qwe01poi"'
     }
 
     stages {
@@ -58,6 +61,9 @@ pipeline {
                     dockerRunCommand += " -e spring.kafka.consumer.auto-offset-reset=${SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET}"
                     dockerRunCommand += " -e topic.transacao.mensal.a.salvar=${TOPIC_TRANSACAO_MENSAL_A_SALVAR}"
                     dockerRunCommand += " -e topic.transacao.mensal.a.criar=${TOPIC_TRANSACAO_MENSAL_A_CRIAR}"
+                    dockerRunCommand += " -e server.ssl.key-store=${SERVER_SSL_KEY_STORE}"
+                    dockerRunCommand += " -e server.ssl.key-store-password=${SERVER_SSL_KEY_STORE_PASSWORD}"
+                    dockerRunCommand += " -e server.ssl.key-password=${SERVER_SSL_KEY_PASSWORD}"
 
                     // Adicionando a imagem Docker ao comando docker run
                     dockerRunCommand += " ${DOCKER_IMAGE}"

@@ -66,8 +66,6 @@ pipeline {
                     dockerRunCommand += " -e server.ssl.key-store=${SERVER_SSL_KEY_STORE}"
                     dockerRunCommand += " -e server.ssl.key-store-password=${SERVER_SSL_KEY_STORE_PASSWORD}"
                     dockerRunCommand += " -e server.ssl.key-password=${SERVER_SSL_KEY_PASSWORD}"
-                    dockerRunCommand += " -e server.ssl.key-store-type=${SERVER_SSL_KEY_STORE_TYPE}"
-                    dockerRunCommand += " -e server.ssl.key-alias=${SERVER_SSL_KEY_ALIAS}"
 
                     // Adicionando a imagem Docker ao comando docker run
                     dockerRunCommand += " ${DOCKER_IMAGE}"

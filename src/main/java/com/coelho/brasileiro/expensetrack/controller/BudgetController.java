@@ -44,7 +44,11 @@ public class BudgetController {
         params.put(Params.SORT_DIR, sortDir);
 
         return ResponseEntity.ok(this.budgetService.getBudgets(params));
+    }
 
+    @GetMapping(path = "/{id:^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$}")
+    public ResponseEntity<?> getBudget(@PathVariable("id") String id) {
+        return ResponseEntity.ok(this.budgetService.getBudget(id));
     }
 
     @PutMapping(path = "/{id:^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$}")

@@ -7,6 +7,8 @@ import com.coelho.brasileiro.expensetrack.repository.TransactionCustomRepository
 import com.coelho.brasileiro.expensetrack.service.UserService;
 import org.springframework.stereotype.Component;
 
+import static com.coelho.brasileiro.expensetrack.util.Constants.Budget.BUDGET_DTO;
+
 @Component
 public class SetTotalSpentHandler extends AbstractHandler {
 
@@ -22,14 +24,26 @@ public class SetTotalSpentHandler extends AbstractHandler {
     @Override
     protected void doHandle(Context context) {
 
-        context.getResponsePage().getItems().forEach(budget -> {
-            BudgetDto budgetDto = (BudgetDto) budget;
+        if (context.getResponsePage() != null) {
+            context.getResponsePage().getItems().forEach(budget -> {
+                BudgetDto budgetDto = (BudgetDto) budget;
 
+                budgetDto.setTotalSpent(transactionCustomRepository.findTotalBalance(budgetDto.getId(),
+                        budgetDto.getStartDate(),
+                        budgetDto.getEndDate(),
+                        userService.getUserLogged().getId()));
+                budgetDto.setBalance(budgetDto.getAmount().subtract(budgetDto.getTotalSpent()));
+            });
+        } else {
+            BudgetDto budgetDto = context.getDto(BUDGET_DTO, BudgetDto.class);
             budgetDto.setTotalSpent(transactionCustomRepository.findTotalBalance(budgetDto.getId(),
                     budgetDto.getStartDate(),
                     budgetDto.getEndDate(),
                     userService.getUserLogged().getId()));
             budgetDto.setBalance(budgetDto.getAmount().subtract(budgetDto.getTotalSpent()));
-        });
+        }
+
+
+
     }
 }

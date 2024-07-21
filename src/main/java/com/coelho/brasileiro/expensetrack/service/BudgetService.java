@@ -17,19 +17,22 @@ public class BudgetService {
     private final SchedulerCreateRecurringBudgetBuilder schedulerCreateRecurringBudgetBuilder;
 
     private final UpdateBudgetBuilder updateBudgetBuilder;
-    private final FindBudgetBuilder findBudgetBuilder;
+    private final FindBudgetsBuilder findBudgetsBuilder;
+    private final FindSingleBudgetBuilder findSingleBudgetBuilder;
 
     private final DeleteBudgetBuilder  deleteBudgetBuilder;
 
     public BudgetService(RegisterBudgetBuilder registerBudgetBuilder,
                          SchedulerCreateRecurringBudgetBuilder schedulerCreateRecurringBudgetBuilder,
                          UpdateBudgetBuilder updateBudgetBuilder,
-                         FindBudgetBuilder findBudgetBuilder,
+                         FindBudgetsBuilder findBudgetsBuilder,
+                         FindSingleBudgetBuilder findSingleBudgetBuilder,
                          DeleteBudgetBuilder deleteBudgetBuilder) {
         this.registerBudgetBuilder = registerBudgetBuilder;
         this.schedulerCreateRecurringBudgetBuilder = schedulerCreateRecurringBudgetBuilder;
         this.updateBudgetBuilder = updateBudgetBuilder;
-        this.findBudgetBuilder = findBudgetBuilder;
+        this.findBudgetsBuilder = findBudgetsBuilder;
+        this.findSingleBudgetBuilder = findSingleBudgetBuilder;
         this.deleteBudgetBuilder = deleteBudgetBuilder;
     }
 
@@ -63,8 +66,17 @@ public class BudgetService {
         DefaultContext  context = DefaultContext.builder().build();
         context.setParams(params);
         context.setEntityNameCurrent("BUDGET");
-        findBudgetBuilder.create(context).build().run();
+        findBudgetsBuilder.create(context).build().run();
         return context.getResponsePage();
+    }
+
+    public BudgetDto getBudget(String id) {
+        BudgetInput budgetInput = BudgetInput.builder().id(id).build();
+        DefaultContext context = DefaultContext.builder().build();
+        context.setBudgetInput(budgetInput);
+        context.setEntityNameCurrent("BUDGET");
+        findSingleBudgetBuilder.create(context).build().run();
+        return context.getBudgetDto();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

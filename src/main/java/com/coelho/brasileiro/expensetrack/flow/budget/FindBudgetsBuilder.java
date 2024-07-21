@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FindBudgetBuilder extends AFlowBuilder<FindBudgetBuilder> {
+public class FindBudgetsBuilder extends AFlowBuilder<FindBudgetsBuilder> {
 
     private final FlowFactory  flowFactory;
     @Autowired
-    public FindBudgetBuilder(FlowFactory flowFactory) {
+    public FindBudgetsBuilder(FlowFactory flowFactory) {
         this.flowFactory = flowFactory;
     }
 
     @Override
-    public FindBudgetBuilder create(Context context) {
+    public FindBudgetsBuilder create(Context context) {
         flow = flowFactory
                 .start()
                 .context(context)

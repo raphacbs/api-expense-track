@@ -1,7 +1,5 @@
 package com.coelho.brasileiro.expensetrack.dto;
 
-import com.coelho.brasileiro.expensetrack.model.Category;
-import com.coelho.brasileiro.expensetrack.model.User;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,6 +19,7 @@ public class BudgetDto  implements  Dto{
     private boolean active;
     private UUID userId;
     private UUID categoryId;
+    private String categoryName;
     private Double amount;
     private String notes;
     private Boolean isDeleted;

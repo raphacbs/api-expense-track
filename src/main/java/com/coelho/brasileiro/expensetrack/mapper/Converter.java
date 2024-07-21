@@ -149,6 +149,7 @@ public interface Converter {
     CategoryDto toDto(Category category);
 
     @Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "categoryName", source = "category.name")
     @Mapping(target = "userId", source = "user.id")
     @Named("toBudgetDto")
     BudgetDto toBudgetDto(Budget budget);

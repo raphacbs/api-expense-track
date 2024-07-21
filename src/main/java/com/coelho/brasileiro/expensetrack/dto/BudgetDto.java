@@ -2,6 +2,7 @@ package com.coelho.brasileiro.expensetrack.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -20,8 +21,10 @@ public class BudgetDto  implements  Dto{
     private UUID userId;
     private UUID categoryId;
     private String categoryName;
-    private Double amount;
+    private BigDecimal amount;
     private String notes;
     private Boolean isDeleted;
     private String parentId;
+    private BigDecimal totalSpent;
+    private BigDecimal balance;
 }

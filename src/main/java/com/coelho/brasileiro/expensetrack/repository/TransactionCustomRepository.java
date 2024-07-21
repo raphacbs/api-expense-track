@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +41,27 @@ public class TransactionCustomRepository {
         Page<Transaction> page = new PageImpl<>(transactions, pageable, total);
 
         return new TransactionPageImpl<>(page, balance);
+    }
+
+    public BigDecimal findTotalBalance(UUID budgetId, LocalDate startDate, LocalDate endDate, UUID userId) {
+        List<Object> params = new ArrayList<>();
+        StringBuilder balanceSql = new StringBuilder(
+                "SELECT COALESCE(SUM(t.total_value), 0) " +
+                        "FROM transaction t " +
+                        "JOIN transaction_budget tb ON t.id = tb.transaction_id " +
+                        "WHERE t.is_deleted = false " +
+                        "AND t.due_date BETWEEN ? AND ? " +
+                        "AND tb.budget_id = ? " +
+                        "AND t.user_id = ? ");
+        params.add(startDate);
+        params.add(endDate);
+        params.add(budgetId);
+        params.add(userId);
+
+        return jdbcTemplate.queryForObject(
+                balanceSql.toString(),
+                params.toArray(),
+                BigDecimal.class);
     }
 
     private void buildBaseQuery(TransactionRequest filterRequest, StringBuilder sql, List<Object> params, UUID userId) {

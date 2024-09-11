@@ -41,10 +41,10 @@ public class RecurringTransactionService {
                         LocalDateTime.now()
                 );
         log.info("Enviando {} transações recorrentes para o Kafka", transactions.size());
-        transactions.forEach(transaction -> {
-            this.kafkaProducerService.sendMessage(propertiesConfig.getTopicTransacaoMensalACriar(), converter.toInput(transaction));
-            log.info("Transação recorrente enviada para o Kafka: {}", transaction.getId());
-        });
+//        transactions.forEach(transaction -> {
+//            this.kafkaProducerService.sendMessage(propertiesConfig.getTopicTransacaoMensalACriar(), converter.toInput(transaction));
+//            log.info("Transação recorrente enviada para o Kafka: {}", transaction.getId());
+//        });
     }
 
 }

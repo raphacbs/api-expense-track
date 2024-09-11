@@ -9,7 +9,6 @@ import com.coelho.brasileiro.expensetrack.handler.actions.ValidateInput;
 import com.coelho.brasileiro.expensetrack.handler.transaction.SaveTransactionBudgetHandler;
 import com.coelho.brasileiro.expensetrack.handler.transaction.SaveTransactionHandler;
 import com.coelho.brasileiro.expensetrack.handler.transaction.SaveTransactionMoneyBoxHandler;
-import com.coelho.brasileiro.expensetrack.handler.transaction.SendMessageRecurringTransactionHandler;
 import com.coelho.brasileiro.expensetrack.input.TransactionInput;
 import com.coelho.brasileiro.expensetrack.validator.InputValidator;
 import jakarta.inject.Named;
@@ -36,7 +35,7 @@ public class RegisterTransactionBuilder extends AFlowBuilder<RegisterTransaction
                 .addAction(validateInput)
                 .addAction(ConvertInputToEntityHandler.class)
                 .addAction(SaveTransactionHandler.class)
-                .addAction(SendMessageRecurringTransactionHandler.class)
+                //   .addAction(SendMessageRecurringTransactionHandler.class)
                 .addAction(SaveTransactionBudgetHandler.class)
                 .addAction(SaveTransactionMoneyBoxHandler.class)
                 .addAction(ConvertEntityToDtoHandler.class)

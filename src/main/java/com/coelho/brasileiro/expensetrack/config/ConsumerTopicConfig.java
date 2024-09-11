@@ -10,7 +10,6 @@ import com.coelho.brasileiro.expensetrack.model.RecurringTransaction;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 
@@ -24,7 +23,7 @@ public class ConsumerTopicConfig {
     private KafkaTemplate<String, Input> kafkaTemplate;
 
 
-    @Bean
+    //  @Bean
     public KafkaConsumerService<TransactionInput> consumerServiceSaveRecurringTransaction(SaveRecurringTransactionHandler handler){
         return new ConsumerTopicBuilder<>(TransactionInput.class)
                 .kafkaProperties(kafkaProperties)
@@ -33,7 +32,7 @@ public class ConsumerTopicConfig {
                 .build();
     }
 
-    @Bean
+    // @Bean
     public KafkaConsumerService<RecurringTransaction> consumerServiceSaveTransaction(CreateTransactionFromRecurringTransactionHandler handler){
         return new ConsumerTopicBuilder<>(RecurringTransaction.class)
                 .kafkaProperties(kafkaProperties)

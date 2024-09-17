@@ -27,7 +27,7 @@ jobs:
       - name: Update Maven Project Version
         run: |
           VERSION=${{ steps.set_project_version.outputs.VERSION }}
-          mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -DallowSnapshots=false -B
+          mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -B
 
       - name: Update application.properties with version
         run: |
@@ -60,3 +60,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: raphacbs/api-expense-track
           tags: ${{ steps.set_project_version.outputs.VERSION }}, latest
+
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Send Notification
+        run: |
+          curl --location --request POST 'http://195.35.42.54:9000/api/webhooks/90636282-70ef-43c4-9dc7-7779e9903d3f'

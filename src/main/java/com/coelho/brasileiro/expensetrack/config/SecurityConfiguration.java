@@ -3,11 +3,15 @@ package com.coelho.brasileiro.expensetrack.config;
 
 import com.coelho.brasileiro.expensetrack.filter.FilterChainExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
@@ -45,7 +49,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/api/v1/budgets",
                         "/api/v1/payment-methods")
                 .permitAll()
-
                 .and().cors().and().csrf().disable();
     }
+
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("user")
+                .password("{noop}password")
+                .roles("USER")
+                .build());
+        return manager;
+    }
+
 }
